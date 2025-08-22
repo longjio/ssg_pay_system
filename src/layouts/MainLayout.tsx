@@ -1,3 +1,4 @@
+// D:/ssg_pay_system/src/layouts/MainLayout.tsx
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
@@ -14,7 +15,8 @@ import { MenuItem } from '../types/menu';
 import DrawerContent from './DrawerContent';
 import NotFoundPage from '../pages/NotFoundPage';
 import DsBreadcrumbs from '../components/navigation/DsBreadcrumbs';
-import IconSidebar from './IconSidebar';
+
+import IconSidebar, { ICON_SIDEBAR_WIDTH } from './IconSidebar';
 
 const drawerWidth = 240;
 
@@ -32,6 +34,7 @@ export default function MainLayout() {
     const [isMobileDrawerOpen, setMobileDrawerOpen] = useState(false);
     const [isDesktopDrawerOpen, setDesktopDrawerOpen] = useState(true);
 
+    // --- 핸들러 함수들 (기존과 동일) ---
     useEffect(() => { const currentItem = routableItems.find(item => item.path === location.pathname); if (currentItem) { setActiveTab(currentItem.path ?? null); if (!openTabs.some(tab => tab.id === currentItem.id)) { setOpenTabs(prev => [...prev, currentItem]); } } else { setActiveTab(location.pathname); } }, [location.pathname, openTabs]);
     useEffect(() => { const homeItem = routableItems.find(item => item.path === '/app'); if (homeItem) { setOpenTabs([homeItem]); setActiveTab(homeItem.path ?? null); if (location.pathname === '/' || location.pathname === '/ssg_pay_system/') { navigate('/app', { replace: true }); } } }, []);
     const handleDrawerToggle = () => { if (isMobile) { setMobileDrawerOpen(!isMobileDrawerOpen); } else { setDesktopDrawerOpen(!isDesktopDrawerOpen); } };
@@ -47,45 +50,61 @@ export default function MainLayout() {
     const handleCloseAllTabs = () => { const homeItem = routableItems.find(item => item.path === '/app'); if (homeItem && homeItem.path) { setOpenTabs([homeItem]); navigate(homeItem.path); } else { setOpenTabs([]); navigate('/app'); } handleCloseContextMenu(); };
 
     return (
-        <Box sx={{ display: 'flex', height: '100vh' }}>
-            {/* IconSidebar: onMenuClick 핸들러를 추가합니다. */}
-            <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexShrink: 0 }}>
-                <IconSidebar menuData={menuStructure} onMenuClick={handleDrawerToggle} />
+        // ★ 1. 최상위 Box가 Flex 컨테이너 역할을 합니다.
+        // overflow: 'hidden'을 추가하여 자식 요소로 인한 스크롤바 발생을 원천적으로 방지합니다.
+        <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+            <Header
+                isDesktopDrawerOpen={isDesktopDrawerOpen}
+                isMobile={isMobile}
+                onDrawerToggle={handleDrawerToggle}
+                onTitleClick={handleTitleClick}
+                user={user}
+                onLogout={handleLogout}
+            />
+
+            {/* ★ 2. IconSidebar를 위한 컨테이너입니다. */}
+            {/* 이 컨테이너는 Flex 아이템으로 동작하며, 고정된 너비를 가집니다. */}
+            <Box
+                component="nav"
+                sx={{
+                    width: { sm: ICON_SIDEBAR_WIDTH },
+                    flexShrink: 0, // 너비가 줄어들지 않도록 설정
+                    display: { xs: 'none', sm: 'flex' },
+                    flexDirection: 'column',
+                    borderRight: 1,
+                    borderColor: 'divider',
+                    bgcolor: 'background.paper',
+                }}
+            >
+                {/* Header의 높이만큼 공간을 만들어 IconSidebar가 겹치지 않게 합니다. */}
+                <Toolbar />
+                <IconSidebar menuData={menuStructure} onMenuClick={() => setDesktopDrawerOpen(true)} />
             </Box>
 
-            {/* Drawer: 변경 없음 */}
+            {/* ★ 3. Drawer(2depth 메뉴)도 Flex 아이템으로 동작합니다. */}
+            {/* 복잡한 left, top 속성 대신 Flexbox 흐름에 따라 자연스럽게 배치됩니다. */}
             <Drawer
                 variant={isMobile ? 'temporary' : 'permanent'}
                 open={isMobile ? isMobileDrawerOpen : isDesktopDrawerOpen}
                 onClose={handleDrawerToggle}
                 sx={{
-                    width: { xs: '80%', sm: drawerWidth },
+                    // Drawer의 열림/닫힘 상태에 따라 너비를 동적으로 변경합니다.
+                    width: { sm: isDesktopDrawerOpen ? drawerWidth : 0 },
                     flexShrink: 0,
-                    whiteSpace: 'nowrap',
-                    boxSizing: 'border-box',
                     transition: theme.transitions.create('width', {
                         easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.leavingScreen,
-                    }),
-                    ...(!isDesktopDrawerOpen && !isMobile && {
-                        overflowX: 'hidden',
-                        width: 0,
+                        duration: theme.transitions.duration.enteringScreen,
                     }),
                     [`& .MuiDrawer-paper`]: {
+                        // Drawer의 내용물(Paper)은 부모의 너비를 100% 채우고,
+                        // 위치를 상대적으로 설정하여 Flexbox 흐름을 따르게 합니다.
                         position: 'relative',
-                        width: { xs: '80%', sm: drawerWidth },
-                        boxSizing: 'border-box',
-                        borderRight: { sm: `1px solid ${theme.palette.divider}` },
-                        borderLeft: 'none',
+                        width: '100%',
                         overflowX: 'hidden',
-                        transition: theme.transitions.create('width', {
-                            easing: theme.transitions.easing.sharp,
-                            duration: theme.transitions.duration.leavingScreen,
-                        }),
-                        ...(!isDesktopDrawerOpen && !isMobile && {
-                            width: 0,
-                            border: 'none',
-                        }),
+                        borderLeft: 'none',
+                        // Header 아래에 위치하도록 상단 공간 확보
+                        top: { sm: '64px' },
+                        height: { sm: 'calc(100% - 64px)' },
                     },
                 }}
             >
@@ -93,27 +112,21 @@ export default function MainLayout() {
                 <DrawerContent menuData={menuStructure} onMenuClick={handleMenuClick} />
             </Drawer>
 
-            {/* Main Content Area */}
+            {/* ★ 4. 메인 콘텐츠 영역입니다. */}
+            {/* flexGrow: 1 속성으로 남은 공간을 모두 차지하도록 하여 수동 너비 계산을 제거합니다. */}
             <Box
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    height: '100vh',
                     display: 'flex',
                     flexDirection: 'column',
-                    overflow: 'hidden',
+                    height: '100%',
+                    overflow: 'hidden', // 내부 콘텐츠가 넘칠 경우를 대비
+                    pt: { xs: '56px', sm: '64px' }, // 고정된 Header 높이만큼 패딩
                 }}
             >
-                <Header
-                    isDesktopDrawerOpen={isDesktopDrawerOpen}
-                    isMobile={isMobile}
-                    onDrawerToggle={handleDrawerToggle}
-                    onTitleClick={handleTitleClick}
-                    user={user}
-                    onLogout={handleLogout}
-                />
                 {!isMobile && openTabs.length > 0 && (
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'background.paper', flexShrink: 0 }}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'background.paper' }}>
                         <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
                             {openTabs.map((tab) => (
                                 <Tab
@@ -136,6 +149,7 @@ export default function MainLayout() {
                         </Tabs>
                     </Box>
                 )}
+                {/* 실제 페이지 콘텐츠는 내부에서 스크롤되도록 overflow: 'auto'를 유지합니다. */}
                 <Box sx={{ flexGrow: 1, p: 3, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
                     <DsBreadcrumbs />
                     <Suspense fallback={<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress /></Box>}>
@@ -147,7 +161,7 @@ export default function MainLayout() {
                                     if (relativePath.startsWith('/')) {
                                         relativePath = relativePath.substring(1);
                                     }
-                                    return <Route key={item.id} path={relativePath} element={<PageComponent />} />
+                                    return <Route key={item.id} path={relativePath} element={<PageComponent />} />;
                                 }
                                 return null;
                             })}
@@ -157,7 +171,7 @@ export default function MainLayout() {
                 </Box>
             </Box>
 
-            {/* ContextMenu: 변경 없음 */}
+            {/* ContextMenu (변경 없음) */}
             <Menu
                 open={contextMenu !== null}
                 onClose={handleCloseContextMenu}
