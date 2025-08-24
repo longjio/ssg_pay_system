@@ -37,7 +37,8 @@ const Header = ({
                 pl: { sm: '10px' },
             })}
         >
-            <Toolbar>
+                        <Toolbar sx={{ minHeight: '52px', '@media (min-width:600px)': { minHeight: '52px' } }}>
+
                 <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                     <IconButton
                         color="inherit"

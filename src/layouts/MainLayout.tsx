@@ -11,11 +11,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../contexts/AuthContext';
 import Header from './Header';
 import { routableItems, menuStructure } from '../menu-data';
-import { MenuItem } from '../types/menu';
+import { MenuItem, MenuGroup } from '../types/menu';
 import DrawerContent from './DrawerContent';
 import NotFoundPage from '../pages/NotFoundPage';
 import DsBreadcrumbs from '../components/navigation/DsBreadcrumbs';
 
+import TabContextMenu from '../components/navigation/TabContextMenu'; // 새로 추가된 컴포넌트 임포트
 import IconSidebar, { ICON_SIDEBAR_WIDTH } from './IconSidebar';
 
 const drawerWidth = 240;
@@ -78,7 +79,8 @@ export default function MainLayout() {
             >
                 {/* Header의 높이만큼 공간을 만들어 IconSidebar가 겹치지 않게 합니다. */}
                 <Toolbar />
-                <IconSidebar menuData={menuStructure} onMenuClick={() => setDesktopDrawerOpen(true)} />
+                                <IconSidebar onMenuClick={() => setDesktopDrawerOpen(true)} />
+
             </Box>
 
             {/* ★ 3. Drawer(2depth 메뉴)도 Flex 아이템으로 동작합니다. */}
@@ -103,8 +105,8 @@ export default function MainLayout() {
                         overflowX: 'hidden',
                         borderLeft: 'none',
                         // Header 아래에 위치하도록 상단 공간 확보
-                        top: { sm: '64px' },
-                        height: { sm: 'calc(100% - 64px)' },
+                        top: { sm: '52px' },
+                        height: { sm: 'calc(100% - 52px)' },
                     },
                 }}
             >
@@ -122,7 +124,7 @@ export default function MainLayout() {
                     flexDirection: 'column',
                     height: '100%',
                     overflow: 'hidden', // 내부 콘텐츠가 넘칠 경우를 대비
-                    pt: { xs: '56px', sm: '64px' }, // 고정된 Header 높이만큼 패딩
+                    pt: { xs: '56px', sm: '52px' }, // 고정된 Header 높이만큼 패딩
                 }}
             >
                 {!isMobile && openTabs.length > 0 && (
@@ -171,19 +173,14 @@ export default function MainLayout() {
                 </Box>
             </Box>
 
-            {/* ContextMenu (변경 없음) */}
-            <Menu
-                open={contextMenu !== null}
-                onClose={handleCloseContextMenu}
-                anchorReference="anchorPosition"
-                anchorPosition={contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined}
-            >
-                <MuiMenuItem onClick={handleCloseThisTab} disabled={contextMenu?.tab.path === '/app'}>
-                    이 탭 닫기
-                </MuiMenuItem>
-                <MuiMenuItem onClick={handleCloseOthers}>다른 탭 모두 닫기</MuiMenuItem>
-                <MuiMenuItem onClick={handleCloseAllTabs}>전체 탭 닫기</MuiMenuItem>
-            </Menu>
+            {/* ContextMenu 컴포넌트로 분리 */}
+            <TabContextMenu
+                contextMenu={contextMenu}
+                handleCloseContextMenu={handleCloseContextMenu}
+                handleCloseThisTab={handleCloseThisTab}
+                handleCloseOthers={handleCloseOthers}
+                handleCloseAllTabs={handleCloseAllTabs}
+            />
         </Box>
     );
 }

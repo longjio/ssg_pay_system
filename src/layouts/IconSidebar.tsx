@@ -1,7 +1,7 @@
 import React from 'react';
 // ListItemText를 추가로 import 합니다.
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; // useNavigate는 사용하지 않으므로 제거합니다.
 
 // 아이콘 import
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -14,9 +14,26 @@ import CasesIcon from '@mui/icons-material/Cases';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DomainVerificationIcon from '@mui/icons-material/DomainVerification';
 
+/**
+ * IconSidebar 내부에서 사용하는 메뉴 아이템의 타입을 정의합니다.
+ */
+type IconMenuItem = {
+    id: string;
+    path: string;
+    label: string;
+    icon: React.ReactElement;
+};
+
+/**
+ * IconSidebar가 받을 props 타입을 정의합니다.
+ * onMenuClick: 아이콘 클릭 시 클릭된 아이템 정보를 인자로 전달하는 콜백 함수입니다.
+ */
+interface IconSidebarProps {
+    onMenuClick: (item: IconMenuItem) => void;
+}
 
 // 메뉴 데이터 정의
-const iconMenuItems = [
+const iconMenuItems: IconMenuItem[] = [
     { id: 'product', path: '/app/product', label: '상품대', icon: <InventoryIcon /> },
     { id: 'rent', path: '/app/rent', label: '임대', icon: <BusinessIcon /> },
     { id: 'business', path: '/app/business', label: '영업비', icon: <CasesIcon /> },
@@ -32,8 +49,7 @@ const iconMenuItems = [
 // 사이드바 너비를 상수로 정의하여 MainLayout과 공유할 수 있도록 export 합니다.
 export const ICON_SIDEBAR_WIDTH = 76;
 
-const IconSidebar = () => {
-    const navigate = useNavigate();
+const IconSidebar = ({ onMenuClick }: IconSidebarProps) => {
     const location = useLocation();
     const theme = useTheme();
 
@@ -54,14 +70,13 @@ const IconSidebar = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                pt: '64px',
             }}
         >
             <List sx={{ width: '100%', py: 1, px: 0.5 }}>
                 {iconMenuItems.map((item) => (
                     <ListItem disablePadding sx={{ mb: 1 }} key={item.id}>
                         <ListItemButton
-                            onClick={() => navigate(item.path)}
+                            onClick={() => onMenuClick(item)}
                             selected={isActive(item.path)}
                             sx={{
                                 flexDirection: 'column',
@@ -71,11 +86,11 @@ const IconSidebar = () => {
                                 // ★ 2. 상하 패딩(py)을 상단 패딩(pt)으로 변경하여 16px 여백을 줍니다.
                                 pt: 4,
                                 minHeight: '72px',
-                                '&.Mui-selected': {
-                                    bgcolor: 'primary.main',
-                                    color: 'primary.contrastText',
+                                '&.Mui-selected': { // 선택된 메뉴 아이템 스타일
+                                    bgcolor: 'primary.main !important', // 배경색을 primary.main으로 설정 (강제 적용)
+                                    color: 'primary.contrastText !important', // 글자색을 primary.contrastText로 설정 (강제 적용)
                                     '&:hover': {
-                                        bgcolor: 'primary.dark',
+                                        bgcolor: 'primary.dark !important', // 호버 시 배경색을 primary.dark로 설정 (강제 적용)
                                     },
                                 },
                             }}
