@@ -1,7 +1,6 @@
 import React from 'react';
-// ListItemText를 추가로 import 합니다.
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
-import { useLocation } from 'react-router-dom'; // useNavigate는 사용하지 않으므로 제거합니다.
+import { useLocation } from 'react-router-dom';
 
 // 아이콘 import
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -26,7 +25,6 @@ type IconMenuItem = {
 
 /**
  * IconSidebar가 받을 props 타입을 정의합니다.
- * onMenuClick: 아이콘 클릭 시 클릭된 아이템 정보를 인자로 전달하는 콜백 함수입니다.
  */
 interface IconSidebarProps {
     onMenuClick: (item: IconMenuItem) => void;
@@ -43,10 +41,8 @@ const iconMenuItems: IconMenuItem[] = [
     { id: 'verification', path: '/app/verification', label: '검증관리', icon: <DomainVerificationIcon /> },
     { id: 'stats', path: '/app/stats', label: '기준정보', icon: <BarChartIcon /> },
     { id: 'users', path: '/app/user-management', label: '운영자', icon: <PeopleIcon /> },
-
 ];
 
-// 사이드바 너비를 상수로 정의하여 MainLayout과 공유할 수 있도록 export 합니다.
 export const ICON_SIDEBAR_WIDTH = 76;
 
 const IconSidebar = ({ onMenuClick }: IconSidebarProps) => {
@@ -65,7 +61,7 @@ const IconSidebar = ({ onMenuClick }: IconSidebarProps) => {
             sx={{
                 width: ICON_SIDEBAR_WIDTH,
                 flexShrink: 0,
-                bgcolor: theme.palette.mode === 'dark' ? '#262B32' : '#F4F6F8',
+                bgcolor: 'background.paper',
                 borderRight: `1px solid ${theme.palette.divider}`,
                 display: 'flex',
                 flexDirection: 'column',
@@ -80,17 +76,20 @@ const IconSidebar = ({ onMenuClick }: IconSidebarProps) => {
                             selected={isActive(item.path)}
                             sx={{
                                 flexDirection: 'column',
-                                // ★ 1. 세로 정렬을 '가운데'에서 '시작점(위)'으로 변경합니다.
-                                justifyContent: 'flex-start',
+                                justifyContent: 'center', // 아이콘과 텍스트를 세로 중앙에 배치
                                 alignItems: 'center',
-                                // ★ 2. 상하 패딩(py)을 상단 패딩(pt)으로 변경하여 16px 여백을 줍니다.
-                                pt: 4,
                                 minHeight: '72px',
-                                '&.Mui-selected': { // 선택된 메뉴 아이템 스타일
-                                    bgcolor: 'primary.main !important', // 배경색을 primary.main으로 설정 (강제 적용)
-                                    color: 'primary.contrastText !important', // 글자색을 primary.contrastText로 설정 (강제 적용)
+                                borderRadius: 1, // 모서리를 부드럽게
+                                color: theme.palette.text.secondary, // 선택되지 않았을 때의 기본 색상
+
+                                // ★★★ 핵심 수정 사항 ★★★
+                                // 선택된 아이템의 배경은 primary 색상으로, 아이콘과 글자는 대비되는 색으로 반전시킵니다.
+                                '&.Mui-selected': {
+                                    backgroundColor: theme.palette.primary.main,
+                                    color: theme.palette.primary.contrastText,
+                                    // 선택된 아이템에 마우스를 올렸을 때의 스타일
                                     '&:hover': {
-                                        bgcolor: 'primary.dark !important', // 호버 시 배경색을 primary.dark로 설정 (강제 적용)
+                                        backgroundColor: theme.palette.primary.dark,
                                     },
                                 },
                             }}
@@ -103,11 +102,12 @@ const IconSidebar = ({ onMenuClick }: IconSidebarProps) => {
                                 primaryTypographyProps={{
                                     variant: 'caption',
                                     sx: {
-                                        mt: 0.25,
+                                        mt: 0.5, // 아이콘과의 간격 조정
                                         textAlign: 'center',
                                         lineHeight: 1.2,
                                         fontSize: '11px',
                                         whiteSpace: 'nowrap',
+                                        fontWeight: 500, // 글자를 약간 굵게 하여 가독성 향상
                                     },
                                 }}
                             />

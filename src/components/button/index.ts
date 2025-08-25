@@ -7,6 +7,7 @@ export * from './SearchIconButton';
 // Common Buttons
 export * from './ResetButton';
 export * from './PrintButton';
+export * from './SearchButton';
 
 // CRUD
 export * from './AddButton';

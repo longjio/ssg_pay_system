@@ -1,11 +1,10 @@
-// D:/ds_mui_new/src/components/form/FormField.tsx
+// D:/ssg_pay_system/src/components/form/FormField.tsx
 
 import React from 'react';
-import { Stack, StackProps, TypographyProps } from '@mui/material';
-import { BodyM } from '../typography';
+import { Stack, StackProps, TypographyProps, Typography } from '@mui/material';
+// BodyM 컴포넌트가 없을 경우를 대비해 Typography를 직접 사용하도록 수정할 수 있습니다.
+// import { BodyM } from '../typography';
 
-// BodyM 컴포넌트가 htmlFor prop을 받을 수 있도록 타입을 확장합니다.
-// BodyM이 Typography를 기반으로 한다고 가정합니다.
 interface ExtendedBodyMProps extends TypographyProps {
     htmlFor?: string;
 }
@@ -13,22 +12,22 @@ interface ExtendedBodyMProps extends TypographyProps {
 interface FormFieldProps extends Omit<StackProps, 'direction' | 'spacing'> {
     label: string;
     htmlFor: string;
+    /**
+     * 라벨의 고정 너비를 설정합니다. (e.g., 100, '100px')
+     */
+    labelWidth?: number | string;
 }
 
-/**
- * 라벨과 입력 요소를 조합하는 공통 레이아웃 컴포넌트입니다.
- * 이제 라벨은 디자인 시스템의 BodyM 컴포넌트를 사용합니다.
- */
 export const FormField: React.FC<FormFieldProps> = ({
                                                         label,
                                                         htmlFor,
+                                                        labelWidth = 90, // ★ 1. 기본 너비를 110px로 설정
                                                         children,
                                                         sx,
                                                         ...rest
                                                     }) => {
-    // --- ★★★ 핵심 수정 사항 (1/2) ★★★ ---
-    // BodyM 컴포넌트를 label로 사용하기 위해 확장된 타입으로 단언합니다.
-    const LabelComponent = BodyM as React.FC<ExtendedBodyMProps>;
+    // BodyM이 없을 경우 Typography를 사용합니다.
+    const LabelComponent = Typography as React.FC<ExtendedBodyMProps>;
 
     return (
         <Stack
@@ -46,14 +45,17 @@ export const FormField: React.FC<FormFieldProps> = ({
             }}
             {...rest}
         >
-            {/* --- ★★★ 핵심 수정 사항 (2/2) ★★★ --- */}
-            {/* 기존 BodyM 대신 타입 단언된 LabelComponent를 사용합니다. */}
             <LabelComponent
                 component="label"
                 htmlFor={htmlFor}
                 sx={{
                     flexShrink: 0,
                     fontWeight: 500,
+                    width: labelWidth, // ★ 2. labelWidth prop 적용
+                    // 추가: 텍스트가 길어질 경우를 대비
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
                 }}
             >
                 {label}

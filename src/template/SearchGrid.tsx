@@ -1,7 +1,11 @@
-// D:/ds_mui_new/src/template/Menu.tsx
+// D:/ssg_pay_system/src/template/SearchGrid.tsx
 
 import React, { useState, useMemo } from 'react';
-import { Box, Select, MenuItem, TextField, IconButton, Checkbox } from '@mui/material';
+import { Box, IconButton, Checkbox, Stack } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import type { Dayjs } from 'dayjs';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
@@ -9,7 +13,7 @@ import { GridColDef } from '@mui/x-data-grid';
 import DsDataGrid from '../components/mui_x/datagrid/DsDataGrid';
 import { TitleArea, SearchArea, SubTitleArea } from '../layouts';
 import {
-    SearchIconButton,
+    SearchButton, // SearchButton을 import 합니다.
     ResetButton,
     PrintButton,
     AddButton,
@@ -17,6 +21,7 @@ import {
     SaveButton,
 } from '../components/button';
 import { FormField } from '../components/form/FormField';
+import { SearchFormField } from '../components/form/SearchFormField'; // SearchFormField를 import 합니다.
 
 const initialRows = [
     { id: 1, menuName: '대시보드', path: '/dashboard', order: 1, isUsed: true, depth: 0, parentId: null, menuDescription: '메인 대시보드 화면', canSearch: true, canSave: false, canExcel: true, canPrint: true },
@@ -27,27 +32,22 @@ const initialRows = [
     { id: 6, menuName: '사용자 관리', path: '/users', order: 1, isUsed: false, depth: 1, parentId: 5, menuDescription: '사용자 정보 관리', canSearch: true, canSave: true, canExcel: true, canPrint: false },
 ];
 
-const systemOptions = [
-    { value: 'all', label: '전체' },
-    { value: 'ds_mui_new', label: 'DS MUI NEW' },
-    { value: 'legacy_system', label: '레거시 시스템' },
-];
-
-// ★★★ 여기가 수정된 부분입니다 ★★★
-// MenuItem의 value prop은 boolean을 허용하지 않으므로, 문자열로 변경합니다.
-const usageStatusOptions = [
-    { value: 'all', label: '전체' },
-    { value: 'true', label: '사용' },
-    { value: 'false', label: '미사용' },
-];
-
-export default function MenuConfigPage() {
+export default function SearchGridPage() {
     const [rows, setRows] = useState(initialRows);
-    const [system, setSystem] = useState('all');
+
+    // ★ 1. 새로운 조회 조건을 위한 상태(State)들을 추가합니다.
+    const [accountingUnitCode, setAccountingUnitCode] = useState('');
+    const [accountingUnitName, setAccountingUnitName] = useState('');
+    const [accrualUnitCode, setAccrualUnitCode] = useState('');
+    const [accrualUnitName, setAccrualUnitName] = useState('');
+    const [transferDate, setTransferDate] = useState<Dayjs | null>(null);
+    const [transactionType, setTransactionType] = useState('');
+    const [transactionTypeName, setTransactionTypeName] = useState('');
     const [menuId, setMenuId] = useState('');
     const [menuName, setMenuName] = useState('');
-    // ★ 사용여부 state 추가
-    const [isUsed, setIsUsed] = useState('all');
+    const [cycleCode, setCycleCode] = useState('');
+    const [cycleName, setCycleName] = useState('');
+    const [cycleCount, setCycleCount] = useState('');
 
     const [expandedIds, setExpandedIds] = useState<Set<number | string>>(new Set([2, 5]));
 
@@ -62,6 +62,15 @@ export default function MenuConfigPage() {
             return newSet;
         });
     };
+
+    // ★ 2. 새로운 조회 필드를 위한 핸들러 함수들을 추가합니다.
+    const handleSearchAccountingUnit = () => { if (accountingUnitCode === '1000') setAccountingUnitName('서울본사'); else if (accountingUnitCode === '2000') setAccountingUnitName('부산지사'); else { alert(`'${accountingUnitCode}'에 해당하는 지불회계단위를 찾을 수 없습니다.`); setAccountingUnitName(''); } };
+    const handleSearchAccrualUnit = () => { if (accrualUnitCode === 'A100') setAccrualUnitName('영업1팀'); else if (accrualUnitCode === 'A200') setAccrualUnitName('영업2팀'); else { alert(`'${accrualUnitCode}'에 해당하는 발생회계단위를 찾을 수 없습니다.`); setAccrualUnitName(''); } };
+    const handleSearchTransactionType = () => { if (transactionType === 'purchase') setTransactionTypeName('매입'); else if (transactionType === 'sales') setTransactionTypeName('매출'); else { alert(`'${transactionType}'에 해당하는 거래구분을 찾을 수 없습니다.`); setTransactionTypeName(''); } };
+    const handleSearchMenu = () => { const foundMenu = initialRows.find(row => String(row.id) === menuId); if (foundMenu) setMenuName(foundMenu.menuName); else { alert(`'${menuId}'에 해당하는 메뉴를 찾을 수 없습니다.`); setMenuName(''); } };
+    const handleSearchCycle = () => { if (cycleCode === 'M') setCycleName('매월'); else if (cycleCode === 'W') setCycleName('매주'); else { alert(`'${cycleCode}'에 해당하는 주기코드를 찾을 수 없습니다.`); setCycleName(''); } };
+    const handleSearchCycleCount = () => { alert(`주기회차 '${cycleCount}' 검색`); };
+
 
     const columns: GridColDef[] = [
         {
@@ -171,106 +180,64 @@ export default function MenuConfigPage() {
         });
     }, [rows, expandedIds]);
 
-    // ★ handleSearch 수정
+    // ★ 3. handleSearch와 handleReset 함수를 새로운 조회 조건에 맞게 수정합니다.
     const handleSearch = () => {
-        alert(`검색 조건:\n시스템: ${system}\n메뉴ID: ${menuId}\n메뉴명: ${menuName}\n사용여부: ${isUsed}`);
+        const searchConditions = [
+            `지불회계단위: ${accountingUnitCode} (${accountingUnitName})`,
+            `발생회계단위: ${accrualUnitCode} (${accrualUnitName})`,
+            `지불이관일자: ${transferDate ? transferDate.format('YYYY.MM.DD') : '미선택'}`,
+            `거래구분: ${transactionType} (${transactionTypeName})`,
+            `지불유형: ${menuId} (${menuName})`,
+            `주기코드: ${cycleCode} (${cycleName})`,
+            `주기회차: ${cycleCount}`,
+        ];
+        alert(`검색 조건:\n${searchConditions.join('\n')}`);
     };
 
-    // ★ handleReset 수정
     const handleReset = () => {
-        setSystem('all');
-        setMenuId('');
-        setMenuName('');
-        setIsUsed('all');
+        setAccountingUnitCode(''); setAccountingUnitName('');
+        setAccrualUnitCode(''); setAccrualUnitName('');
+        setTransferDate(null);
+        setTransactionType(''); setTransactionTypeName('');
+        setMenuId(''); setMenuName('');
+        setCycleCode(''); setCycleName('');
+        setCycleCount('');
         alert('조회 조건이 초기화되었습니다.');
     };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', p: 3, boxSizing: 'border-box' }}>
             <TitleArea title="메뉴 관리">
+                {/* ★ 4. TitleArea에 SearchButton을 추가합니다. */}
+                <SearchButton onClick={handleSearch} />
                 <PrintButton onClick={() => alert('인쇄 버튼 클릭')} />
                 <ResetButton onClick={handleReset} />
             </TitleArea>
 
+            {/* ★ 5. SearchArea 내부를 요청하신 필드들로 교체합니다. */}
             <SearchArea>
-                <FormField label="시스템" htmlFor="system-select">
-                    <Select
-                        id="system-select"
-                        value={system}
-                        onChange={(e) => setSystem(e.target.value)}
-                        size="small"
-                        sx={{
-                            width: '180px',
-                            '& .MuiOutlinedInput-input': {
-                                padding: '6px 12px',
-                            },
-                        }}
-                    >
-                        {systemOptions.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormField>
-
-                <FormField label="메뉴ID" htmlFor="menu-id-input">
-                    <TextField
-                        id="menu-id-input"
-                        value={menuId}
-                        onChange={(e) => setMenuId(e.target.value)}
-                        placeholder="메뉴ID를 입력하세요"
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                            width: '200px',
-                            '& .MuiOutlinedInput-input': {
-                                padding: '6px 12px',
-                            },
-                        }}
-                    />
-                </FormField>
-
-                <FormField label="메뉴명" htmlFor="menu-name-input">
-                    <TextField
-                        id="menu-name-input"
-                        value={menuName}
-                        onChange={(e) => setMenuName(e.target.value)}
-                        placeholder="메뉴명을 입력하세요"
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                            width: '200px',
-                            '& .MuiOutlinedInput-input': {
-                                padding: '6px 12px',
-                            },
-                        }}
-                    />
-                </FormField>
-
-                {/* ★ 사용여부 Select 추가 */}
-                <FormField label="사용여부" htmlFor="usage-status-select">
-                    <Select
-                        id="usage-status-select"
-                        value={isUsed}
-                        onChange={(e) => setIsUsed(e.target.value as string)}
-                        size="small"
-                        sx={{
-                            width: '180px',
-                            '& .MuiOutlinedInput-input': {
-                                padding: '6px 12px',
-                            },
-                        }}
-                    >
-                        {usageStatusOptions.map((option) => (
-                            <MenuItem key={String(option.value)} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormField>
-
-                <SearchIconButton onClick={handleSearch} />
+                <Box sx={{ flexGrow: 1 }}>
+                    <Stack spacing={2}>
+                        {/* Row 1 */}
+                        <Stack direction="row" spacing={3.75}>
+                            <SearchFormField label="지불회계단위" codeValue={accountingUnitCode} onCodeChange={(e) => setAccountingUnitCode(e.target.value)} codePlaceholder="코드" nameValue={accountingUnitName} namePlaceholder="회계단위명" onSearchClick={handleSearchAccountingUnit} />
+                            <SearchFormField label="발생회계단위" codeValue={accrualUnitCode} onCodeChange={(e) => setAccrualUnitCode(e.target.value)} codePlaceholder="코드" nameValue={accrualUnitName} namePlaceholder="회계단위명" onSearchClick={handleSearchAccrualUnit} />
+                            <FormField label="지불이관일자" htmlFor="transfer-date-picker">
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker value={transferDate} onChange={(newValue) => setTransferDate(newValue)} sx={{ width: '170px' }} slotProps={{ textField: { id: 'transfer-date-picker', size: 'small' } }} />
+                                </LocalizationProvider>
+                            </FormField>
+                            <SearchFormField label="거래구분" codeValue={transactionType} onCodeChange={(e) => setTransactionType(e.target.value)} codePlaceholder="코드" nameValue={transactionTypeName} namePlaceholder="거래구분명" onSearchClick={handleSearchTransactionType} />
+                        </Stack>
+                        {/* Row 2 */}
+                        <Stack direction="row" spacing={3.75}>
+                            <SearchFormField label="지불유형" codeValue={menuId} onCodeChange={(e) => setMenuId(e.target.value)} codePlaceholder="유형코드" nameValue={menuName} namePlaceholder="유형명" onSearchClick={handleSearchMenu} />
+                            <SearchFormField label="주기코드" codeValue={cycleCode} onCodeChange={(e) => setCycleCode(e.target.value)} codePlaceholder="코드" nameValue={cycleName} namePlaceholder="주기명" onSearchClick={handleSearchCycle} />
+                            <SearchFormField label="주기회차" codeValue={cycleCount} onCodeChange={(e) => setCycleCount(e.target.value)} codePlaceholder="회차" nameValue="" onSearchClick={handleSearchCycleCount} hideNameField={true} codeTextFieldProps={{ sx: { width: '132px' } }} />
+                            <SearchFormField label="통화코드" codeValue={cycleCount} onCodeChange={(e) => setCycleCount(e.target.value)} codePlaceholder="회차" nameValue="" onSearchClick={handleSearchCycleCount} hideNameField={true} codeTextFieldProps={{ sx: { width: '120px' } }} />
+                        </Stack>
+                    </Stack>
+                </Box>
             </SearchArea>
 
             <SubTitleArea title="메뉴 목록">

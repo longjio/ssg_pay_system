@@ -38,13 +38,12 @@ export const appRoutes: AppRouteConfig[] = [
     { id: 'home', path: '/', component: lazy(() => import('./pages/AboutProjectPage')) },
 
     // Template 그룹
-    { id: 'menu-config', path: '/menu-config', component: lazy(() => import('./template/Menu')), menu: { text: '메뉴 관리', group: 'group-template' } },
-    { id: 'menu-obj-config', path: '/menu-obj-config', component: lazy(() => import('./template/MenuObj')), menu: { text: '메뉴 OBJ 관리', group: 'group-template' } },
+    { id: 'tabs-grid', path: '/tabs-grid', component: lazy(() => import('./template/TabsGrid')), menu: { text: '지불이관 명세서', group: 'group-template' } },
+    { id: 'menu-config', path: '/menu-config', component: lazy(() => import('./template/SearchGrid')), menu: { text: '특정 지불 명세서', group: 'group-template' } },    { id: 'menu-obj-config', path: '/menu-obj-config', component: lazy(() => import('./template/MenuObj')), menu: { text: '메뉴 OBJ 관리', group: 'group-template' } },
     { id: 'user-management', path: '/user-management', component: lazy(() => import('./template/User')), menu: { text: '사용자 관리', group: 'group-template' } },
     { id: 'user-menu-auth', path: '/user-menu-auth', component: lazy(() => import('./template/UserMenu')), menu: { text: '사용자별 메뉴 관리', group: 'group-template' } },
     { id: 'auth-group-management', path: '/auth-group-management', component: lazy(() => import('./template/AuthGroup')), menu: { text: '권한 그룹 관리', group: 'group-template' } },
     { id: 'auth-group-user', path: '/auth-group-user', component: lazy(() => import('./template/AuthGroupUser')), menu: { text: '권한그룹별 사용자 관리', group: 'group-template' } },
-    { id: 'tabs-grid', path: '/tabs-grid', component: lazy(() => import('./template/TabsGrid')), menu: { text: '탭 그리드', group: 'group-template' } },
     // Foundations 그룹
     { id: 'color-palette', path: '/color-palette', component: lazy(() => import('./pages/ColorPalettePage')), menu: { text: 'Color Palette', group: 'group-foundations' } },
     { id: 'component-showcase', path: '/component-showcase', component: lazy(() => import('./pages/ComponentShowcasePage')), menu: { text: 'Component Showcase', group: 'group-foundations' } },
