@@ -47,6 +47,7 @@ const Header = ({
                         onClick={onDrawerToggle}
                         sx={{
                             mr: 2,
+                            mt: 1,
                             display: 'block',
                         }}
                     >
