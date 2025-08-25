@@ -35,7 +35,7 @@ export const menuGroups: MenuGroupInfo[] = [
 
 export const appRoutes: AppRouteConfig[] = [
     // 메뉴에 표시되지 않는 페이지
-    { id: 'home', path: '/', component: lazy(() => import('./pages/AboutProjectPage')) },
+    { id: 'home', path: '/', component: lazy(() => import('./template/TabsGrid')) },
 
     // Template 그룹
     { id: 'tabs-grid', path: '/tabs-grid', component: lazy(() => import('./template/TabsGrid')), menu: { text: '지불이관 명세서', group: 'group-template' } },
