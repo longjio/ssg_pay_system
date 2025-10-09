@@ -12,7 +12,7 @@ interface AppDrawerProps {
     isMobileDrawerOpen: boolean;
     isDesktopDrawerOpen: boolean;
     onDrawerToggle: () => void;
-    menuData: MenuGroup[];
+    menuData: MenuItem[];
     onMenuClick: (item: MenuItem) => void;
 }
 

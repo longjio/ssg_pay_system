@@ -1,64 +1,87 @@
+// src/pages/BottomNavPage.tsx
 import React, { useState } from 'react';
-import { Box, BottomNavigation, BottomNavigationAction, Paper, Typography } from '@mui/material';
+import { Stack, Box, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import FolderIcon from '@mui/icons-material/Folder';
+import ComponentShowcase from '../components/common/ComponentShowcase';
 
 const BottomNavPage = () => {
-    // 현재 선택된 탭의 인덱스(0, 1, 2...)를 관리하는 상태
+  const basicCode = `
+// In your component...
+const [value, setValue] = useState(0);
+
+// This would typically be fixed to the bottom of the screen.
+// The Paper component provides the container and shadow.
+<Paper sx={{ width: 350 }} elevation={3}>
+  <BottomNavigation
+    showLabels
+    value={value}
+    onChange={(event, newValue) => {
+      setValue(newValue);
+    }}
+  >
+    <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+    <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+    <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+  </BottomNavigation>
+</Paper>
+  `;
+
+  const noLabelsCode = `
+// In your component...
+const [value, setValue] = useState(0);
+
+<Paper sx={{ width: 350 }} elevation={3}>
+  <BottomNavigation
+    value={value}
+    onChange={(event, newValue) => {
+      setValue(newValue);
+    }}
+  >
+    <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+    <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+    <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+  </BottomNavigation>
+</Paper>
+  `;
+
+  // Self-contained component for the interactive example
+  const InteractiveBottomNav = ({ showLabels = true }: { showLabels?: boolean }) => {
     const [value, setValue] = useState(0);
-
-    // 선택된 탭에 따라 중앙에 보여줄 텍스트 컨텐츠를 결정하는 함수
-    const renderContent = () => {
-        switch (value) {
-            case 0:
-                return "Recent's content is displayed here.";
-            case 1:
-                return "Favorites' content is displayed here.";
-            case 2:
-                return "Nearby's content is displayed here.";
-            case 3:
-                return "Folder's content is displayed here.";
-            default:
-                return "Select a tab.";
-        }
-    };
-
     return (
-        <Box sx={{
-            // BottomNavigation에 의해 컨텐츠가 가려지지 않도록 하단 패딩을 줍니다.
-            // 실제 앱에서는 BottomNavigation의 높이(기본 56px)만큼 주면 됩니다.
-            pb: '70px',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
-            <Typography variant="h4" color="text.secondary">
-                {renderContent()}
-            </Typography>
-
-            {/*
-              Paper 컴포넌트로 감싸 그림자(elevation) 효과를 주고,
-              sx prop을 이용해 화면 하단에 고정시킵니다.
-            */}
-            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-                <BottomNavigation
-                    showLabels
-                    value={value}
-                    onChange={(event, newValue) => {
-                        setValue(newValue);
-                    }}
-                >
-                    <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-                    <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-                    <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-                    <BottomNavigationAction label="Folder" icon={<FolderIcon />} />
-                </BottomNavigation>
-            </Paper>
-        </Box>
+      <Paper sx={{ width: 350 }} elevation={3}>
+        <BottomNavigation
+          showLabels={showLabels}
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+        </BottomNavigation>
+      </Paper>
     );
+  };
+
+  return (
+    <Stack spacing={4}>
+      <ComponentShowcase
+        title="Bottom Navigation with Labels"
+        description="A simple Bottom Navigation bar. The 'showLabels' prop ensures labels are always visible."
+        component={<InteractiveBottomNav />}
+        code={basicCode}
+      />
+      <ComponentShowcase
+        title="Bottom Navigation without Labels"
+        description="When 'showLabels' is omitted, labels only appear on the active item."
+        component={<InteractiveBottomNav showLabels={false} />}
+        code={noLabelsCode}
+      />
+    </Stack>
+  );
 };
 
 export default BottomNavPage;

@@ -34,12 +34,24 @@ export default function MainLayout() {
 
     const [isMobileDrawerOpen, setMobileDrawerOpen] = useState(false);
     const [isDesktopDrawerOpen, setDesktopDrawerOpen] = useState(true);
+    const [activeIconMenuId, setActiveIconMenuId] = useState<string>('foundations'); // 활성 아이콘 메뉴 상태 추가
 
     // --- 핸들러 함수들 (기존과 동일) ---
     useEffect(() => { const currentItem = routableItems.find(item => item.path === location.pathname); if (currentItem) { setActiveTab(currentItem.path ?? null); if (!openTabs.some(tab => tab.id === currentItem.id)) { setOpenTabs(prev => [...prev, currentItem]); } } else { setActiveTab(location.pathname); } }, [location.pathname, openTabs]);
     useEffect(() => { const homeItem = routableItems.find(item => item.path === '/app'); if (homeItem) { setOpenTabs([homeItem]); setActiveTab(homeItem.path ?? null); if (location.pathname === '/' || location.pathname === '/ssg_pay_system/') { navigate('/app', { replace: true }); } } }, []);
     const handleDrawerToggle = () => { if (isMobile) { setMobileDrawerOpen(!isMobileDrawerOpen); } else { setDesktopDrawerOpen(!isDesktopDrawerOpen); } };
     const handleMenuClick = useCallback((item: MenuItem) => { if (item.path) { navigate(item.path); } if (isMobile) { setMobileDrawerOpen(false); } }, [navigate, isMobile]);
+
+    const handleIconMenuClick = (item: { id: string }) => {
+        setActiveIconMenuId(item.id); // 활성 아이콘 메뉴 ID 설정
+        setDesktopDrawerOpen(true); // Drawer 열기
+
+        const group = menuStructure.find(g => g.id === item.id);
+        
+        if (group && group.items.length > 0 && group.items[0].path) {
+            navigate(group.items[0].path);
+        }
+    };
     const handleTabChange = (event: React.SyntheticEvent, newPath: string) => { navigate(newPath); };
     const handleCloseTab = (e: React.MouseEvent, tabToClose: MenuItem) => { e.stopPropagation(); if (tabToClose.path === '/app') return; const tabIndex = openTabs.findIndex(tab => tab.id === tabToClose.id); const newTabs = openTabs.filter(tab => tab.id !== tabToClose.id); setOpenTabs(newTabs); if (activeTab === tabToClose.path) { if (newTabs.length > 0) { const newActiveTab = newTabs[Math.max(0, tabIndex - 1)]; if (newActiveTab.path) { navigate(newActiveTab.path); } } else { navigate('/app'); } } };
     const handleTitleClick = useCallback(() => navigate('/app'), [navigate]);
@@ -49,6 +61,9 @@ export default function MainLayout() {
     const handleCloseThisTab = () => { if (contextMenu?.tab) { handleCloseTab({ stopPropagation: () => {} } as React.MouseEvent, contextMenu.tab); } handleCloseContextMenu(); };
     const handleCloseOthers = () => { if (contextMenu?.tab) { const homeItem = routableItems.find(item => item.path === '/app'); const currentTab = contextMenu.tab; let tabsToKeep = [currentTab]; if (homeItem && homeItem.id !== currentTab.id) { tabsToKeep.unshift(homeItem); } setOpenTabs(tabsToKeep); if (currentTab.path) { navigate(currentTab.path); } } handleCloseContextMenu(); };
     const handleCloseAllTabs = () => { const homeItem = routableItems.find(item => item.path === '/app'); if (homeItem && homeItem.path) { setOpenTabs([homeItem]); navigate(homeItem.path); } else { setOpenTabs([]); navigate('/app'); } handleCloseContextMenu(); };
+
+    // 활성 아이콘 메뉴에 해당하는 서브메뉴 데이터 필터링
+    const activeSubMenu = menuStructure.find(g => g.id === activeIconMenuId);
 
     return (
         // ★ 1. 최상위 Box가 Flex 컨테이너 역할을 합니다.
@@ -79,7 +94,7 @@ export default function MainLayout() {
             >
                 {/* Header의 높이만큼 공간을 만들어 IconSidebar가 겹치지 않게 합니다. */}
                 <Toolbar />
-                                <IconSidebar onMenuClick={() => setDesktopDrawerOpen(true)} />
+                <IconSidebar onMenuClick={handleIconMenuClick} activeIconMenuId={activeIconMenuId} />
 
             </Box>
 
@@ -111,7 +126,7 @@ export default function MainLayout() {
                 }}
             >
                 {isMobile && <Toolbar />}
-                <DrawerContent menuData={menuStructure} onMenuClick={handleMenuClick} />
+                <DrawerContent menuData={activeSubMenu?.items || []} onMenuClick={handleMenuClick} />
             </Drawer>
 
             {/* ★ 4. 메인 콘텐츠 영역입니다. */}

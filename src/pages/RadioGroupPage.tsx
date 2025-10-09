@@ -1,147 +1,112 @@
 // src/pages/RadioGroupPage.tsx
-
 import React, { useState } from 'react';
-import { Stack, Typography, Box } from '@mui/material';
-import Radio from '@mui/material/Radio'; // 개별 Radio 컴포넌트 import
+import { Stack } from '@mui/material';
+import ComponentShowcase from '../components/common/ComponentShowcase';
 import { DsRadioGroup } from '../components/input/DsRadioGroup';
 
 const RadioGroupPage = () => {
-    // 첫 번째 라디오 그룹 상태
-    const [selectedValue1, setSelectedValue1] = useState<string>('female');
-    // 두 번째 라디오 그룹 상태 (가로 정렬 예시)
-    const [selectedValue2, setSelectedValue2] = useState<string>('option1');
-    // 세 번째 라디오 그룹 상태 (비활성화 예시)
-    const [selectedValue3, setSelectedValue3] = useState<string>('apple');
-    // 네 번째: 라디오 버튼 크기 예시 상태
-    const [sizeRadioValue, setSizeRadioValue] = React.useState('a');
+  const radioItems = [
+    { label: 'First Option', value: 'first' },
+    { label: 'Second Option', value: 'second' },
+    { label: 'Third Option', value: 'third' },
+  ];
 
-    const radioItems1 = [
-        { label: '남성', value: 'male' },
-        { label: '여성', value: 'female' },
-        { label: '기타', value: 'other' },
-    ];
+  const verticalCode = `
+const radioItems = [
+  { label: 'First Option', value: 'first' },
+  { label: 'Second Option', value: 'second' },
+  { label: 'Third Option', value: 'third' },
+];
 
-    const radioItems2 = [
-        { label: '옵션 1', value: 'option1' },
-        { label: '옵션 2', value: 'option2' },
-        { label: '옵션 3', value: 'option3' },
-    ];
+// In your component...
+const [selectedValue, setSelectedValue] = useState('first');
 
-    const fruitItems = [
-        { label: '사과', value: 'apple' },
-        { label: '바나나', value: 'banana' },
-        { label: '오렌지', value: 'orange' },
-    ];
+<DsRadioGroup
+  label="Vertical Group"
+  items={radioItems}
+  value={selectedValue}
+  onChange={(e, value) => setSelectedValue(value)}
+  name="vertical-group"
+/>
+  `;
 
-    const handleChange1 = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
-        setSelectedValue1(value);
-    };
+  const horizontalCode = `
+const radioItems = [
+  { label: 'First Option', value: 'first' },
+  { label: 'Second Option', value: 'second' },
+  { label: 'Third Option', value: 'third' },
+];
 
-    const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
-        setSelectedValue2(value);
-    };
+// In your component...
+const [selectedValue, setSelectedValue] = useState('first');
 
-    const handleChange3 = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
-        setSelectedValue3(value);
-    };
+<DsRadioGroup
+  row
+  label="Horizontal Group"
+  items={radioItems}
+  value={selectedValue}
+  onChange={(e, value) => setSelectedValue(value)}
+  name="horizontal-group"
+/>
+  `;
 
-    // 라디오 버튼 크기 예시 핸들러
-    const handleSizeRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSizeRadioValue(event.target.value);
-    };
+  const disabledCode = `
+<DsRadioGroup
+  disabled
+  label="Disabled Group"
+  items={radioItems}
+  value="first"
+  name="disabled-group"
+  onChange={() => {}} // onChange is required, even when disabled
+/>
+  `;
 
-    // 라디오 버튼 크기 예시를 위한 controlProps 헬퍼 함수
-    const controlProps = (item: string) => ({
-        checked: sizeRadioValue === item,
-        onChange: handleSizeRadioChange,
-        value: item,
-        name: 'size-radio-button-demo',
-        inputProps: { 'aria-label': item },
-    });
-
+  // Self-contained component for interactive examples
+  const InteractiveRadioGroup = ({ row = false, name }: { row?: boolean, name: string }) => {
+    const [value, setValue] = useState('first');
     return (
-        <Stack spacing={4} sx={{ p: 3 }}>
-            <Typography variant="h1" component="h1" gutterBottom>
-                Radio Group
-            </Typography>
-
-            {/* --- 기존 DsRadioGroup 예시들 --- */}
-            <Stack spacing={2} sx={{ p: 3, border: '1px solid #e0e0e0' }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    RadioGroup Vertical
-                </Typography>
-                <DsRadioGroup
-                    id="gender-group"
-                    label="성별을 선택하세요"
-                    name="gender"
-                    items={radioItems1}
-                    value={selectedValue1}
-                    onChange={handleChange1}
-                />
-                <Box sx={{ mt: 1 }}>
-                    <Typography variant="body2">선택된 값: {selectedValue1}</Typography>
-                </Box>
-            </Stack>
-
-            <Stack spacing={2} sx={{ p: 3, border: '1px solid #e0e0e0' }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    RadioGroup Horizontal
-                </Typography>
-                <DsRadioGroup
-                    id="options-group-row"
-                    label="옵션을 선택하세요 (가로)"
-                    name="optionsRow"
-                    items={radioItems2}
-                    value={selectedValue2}
-                    onChange={handleChange2}
-                    row
-                />
-                <Box sx={{ mt: 1 }}>
-                    <Typography variant="body2">선택된 값: {selectedValue2}</Typography>
-                </Box>
-            </Stack>
-
-            <Stack spacing={2} sx={{ p: 3, border: '1px solid #e0e0e0' }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    RadioGroup 비활성화 (disabled prop)
-                </Typography>
-                <DsRadioGroup
-                    id="fruits-group-disabled"
-                    label="과일을 선택하세요 (비활성화됨)"
-                    name="fruitsDisabled"
-                    items={fruitItems}
-                    value={selectedValue3}
-                    onChange={handleChange3}
-                    disabled
-                />
-                <Box sx={{ mt: 1 }}>
-                    <Typography variant="body2">선택된 값: {selectedValue3}</Typography>
-                </Box>
-            </Stack>
-
-            {/* --- 새로운 섹션: Radio 버튼 크기 데모 --- */}
-            <Stack spacing={2} sx={{ p: 3, border: '1px solid #e0e0e0' }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    Radio 크기 조절 (Size)
-                </Typography>
-                <Box> {/* 제공된 예제처럼 div 대신 Box 사용 */}
-                    <Radio {...controlProps('a')} size="small" />
-                    <Radio {...controlProps('b')} /> {/* Default size */}
-                    <Radio
-                        {...controlProps('c')}
-                        sx={{
-                            '& .MuiSvgIcon-root': {
-                                fontSize: 28,
-                            },
-                        }}
-                    />
-                </Box>
-                <Box sx={{ mt: 1 }}>
-                    <Typography variant="body2">선택된 크기 라디오 값: {sizeRadioValue}</Typography>
-                </Box>
-            </Stack>
-        </Stack>
+      <DsRadioGroup
+        row={row}
+        label={row ? "Horizontal Group" : "Vertical Group"}
+        items={radioItems}
+        value={value}
+        onChange={(e, val) => setValue(val)}
+        name={name}
+      />
     );
+  };
+
+  return (
+    <Stack spacing={4}>
+      <ComponentShowcase
+        title="Radio Group (Vertical)"
+        description="The default layout for the radio group is vertical."
+        component={<InteractiveRadioGroup name="vertical-group" />}
+        code={verticalCode}
+      />
+      <ComponentShowcase
+        title="Radio Group (Horizontal)"
+        description="Use the 'row' prop to display the radio buttons in a single line."
+        component={<InteractiveRadioGroup row name="horizontal-group" />}
+        code={horizontalCode}
+      />
+      <ComponentShowcase
+        title="Disabled Radio Group"
+        description="The entire group can be disabled using the 'disabled' prop."
+        component={
+          <DsRadioGroup
+            disabled
+            label="Disabled Group"
+            items={radioItems}
+            value="first"
+            name="disabled-group"
+            onChange={() => {}}
+          />
+        }
+        code={disabledCode}
+      />
+    </Stack>
+  );
 };
 
 export default RadioGroupPage;
