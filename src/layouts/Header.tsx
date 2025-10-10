@@ -7,7 +7,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { ThemeModeButtonGroup } from '../components/common/ThemeModeButtonGroup';
 import { User } from '../api/services/authService';
-import { ICON_SIDEBAR_WIDTH } from './IconSidebar';
+
 
 // Header 컴포넌트가 필요로 하는 props 타입을 정의합니다.
 interface HeaderProps {

@@ -8,7 +8,6 @@ import {
     Chip,
     Avatar,
     List,
-    Divider, // Divider는 이제 사용되지 않지만, 다른 곳에서 필요할 수 있어 남겨둡니다.
 } from '@mui/material';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import DriveEtaIcon from '@mui/icons-material/DriveEta';
@@ -16,7 +15,7 @@ import CoffeeIcon from '@mui/icons-material/Coffee';         // 리저브 아이
 import LocalParkingIcon from '@mui/icons-material/LocalParking'; // 주차 아이콘
 import MobileHeader from '../components/MobileHeader';
 // typography/index.ts 에서 모든 컴포넌트를 한번에 가져옵니다.
-import { TitleXS, BodyM, BodyS, BodyXS } from '../../components/typography';
+import { BodyM, BodyS, BodyXS } from '../../components/typography';
 import CoffeeImage from '../../assets/images/img_coffee.jpg';
 
 // 매장 데이터 타입 정의

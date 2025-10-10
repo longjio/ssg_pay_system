@@ -15,7 +15,6 @@ import {
     ListItem,
     ListItemText,
     IconButton,
-    Typography,
     Divider,
 } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile'; // ★ 3. 아이콘을 import 합니다.

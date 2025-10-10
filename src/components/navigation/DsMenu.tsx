@@ -6,7 +6,6 @@ import {
     MenuItem as MuiMenuItem,
     ListItemIcon,
     ListItemText,
-    Divider,
     MenuProps as MuiMenuProps,
 } from '@mui/material';
 // [수정] 'DsMenuItem'을 표준 타입인 'MenuItem'으로 변경합니다.

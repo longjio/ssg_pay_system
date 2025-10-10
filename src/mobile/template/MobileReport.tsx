@@ -20,7 +20,7 @@ import {
 import { BarChart } from '@mui/x-charts/BarChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import MobileHeader from '../components/MobileHeader';
-import { TitleS, TitleXS, BodyM, BodyS } from '../../components/typography';
+import { TitleXS, BodyS } from '../../components/typography';
 
 // --- 기간별 샘플 데이터 정의 (기존과 동일) ---
 type ReportPeriod = 'daily' | 'weekly' | 'monthly';

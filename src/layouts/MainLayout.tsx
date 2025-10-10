@@ -4,14 +4,14 @@ import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import {
     Box, CircularProgress, useTheme, useMediaQuery, Drawer, Toolbar,
-    IconButton, Tabs, Tab, Menu, MenuItem as MuiMenuItem,
+    IconButton, Tabs, Tab,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { useAuth } from '../contexts/AuthContext';
 import Header from './Header';
 import { routableItems, menuStructure } from '../menu-data';
-import { MenuItem, MenuGroup } from '../types/menu';
+import { MenuItem } from '../types/menu';
 import DrawerContent from './DrawerContent';
 import NotFoundPage from '../pages/NotFoundPage';
 import DsBreadcrumbs from '../components/navigation/DsBreadcrumbs';
@@ -38,7 +38,7 @@ export default function MainLayout() {
 
     // --- 핸들러 함수들 (기존과 동일) ---
     useEffect(() => { const currentItem = routableItems.find(item => item.path === location.pathname); if (currentItem) { setActiveTab(currentItem.path ?? null); if (!openTabs.some(tab => tab.id === currentItem.id)) { setOpenTabs(prev => [...prev, currentItem]); } } else { setActiveTab(location.pathname); } }, [location.pathname, openTabs]);
-    useEffect(() => { const homeItem = routableItems.find(item => item.path === '/app'); if (homeItem) { setOpenTabs([homeItem]); setActiveTab(homeItem.path ?? null); if (location.pathname === '/' || location.pathname === '/ssg_pay_system/') { navigate('/app', { replace: true }); } } }, []);
+    useEffect(() => { const homeItem = routableItems.find(item => item.path === '/app'); if (homeItem) { setOpenTabs([homeItem]); setActiveTab(homeItem.path ?? null); if (location.pathname === '/' || location.pathname === '/ssg_pay_system/') { navigate('/app', { replace: true }); } } }, [location.pathname, navigate]);
     const handleDrawerToggle = () => { if (isMobile) { setMobileDrawerOpen(!isMobileDrawerOpen); } else { setDesktopDrawerOpen(!isDesktopDrawerOpen); } };
     const handleMenuClick = useCallback((item: MenuItem) => { if (item.path) { navigate(item.path); } if (isMobile) { setMobileDrawerOpen(false); } }, [navigate, isMobile]);
 

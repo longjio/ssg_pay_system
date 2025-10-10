@@ -1,59 +1,125 @@
-// src/pages/StepperPage.tsx (예제 페이지)
-
+// src/pages/StepperPage.tsx
 import React from 'react';
-import { Box, Typography, TextField } from '@mui/material';
+import { Box, Stack, TextField, Typography } from '@mui/material';
+import ComponentShowcase from '../components/common/ComponentShowcase';
 import DsStepper, { StepItem } from '../components/navigation/DsStepper';
 
 const StepperPage = () => {
-    // 1. Stepper에 표시할 단계 정보 정의
-    const steps: StepItem[] = [
-        { label: 'Enter your name' },
-        { label: 'Choose a password', optional: true },
-        { label: 'Confirm details' },
-    ];
+  // Stepper에 공통적으로 사용할 단계 정보
+  const steps: StepItem[] = [
+    { label: 'Select campaign settings' },
+    { label: 'Create an ad group', optional: true },
+    { label: 'Create an ad' },
+  ];
 
-    // 2. 각 단계에 보여줄 컨텐츠 정의
-    const stepContents: React.ReactNode[] = [
-        // Step 1 Content
-        <Box>
-            <Typography>Please enter your full name.</Typography>
-            <TextField label="Full Name" variant="outlined" fullWidth margin="normal" />
-        </Box>,
-        // Step 2 Content
-        <Box>
-            <Typography>This step is optional. You can set a password now or later.</Typography>
-            <TextField label="Password" type="password" variant="outlined" fullWidth margin="normal" />
-        </Box>,
-        // Step 3 Content
-        <Box>
-            <Typography>Please review your information before finishing.</Typography>
-        </Box>,
-    ];
+  // 각 단계에 공통적으로 보여줄 컨텐츠
+  const stepContents: React.ReactNode[] = [
+    <Box>
+      <Typography>Step 1: Campaign Settings</Typography>
+      <TextField label="Campaign Name" variant="outlined" fullWidth margin="normal" />
+    </Box>,
+    <Box>
+      <Typography>Step 2: Ad Group (Optional)</Typography>
+      <TextField label="Ad Group Name" variant="outlined" fullWidth margin="normal" />
+    </Box>,
+    <Box>
+      <Typography>Step 3: Ad Creation</Typography>
+      <TextField label="Ad Headline" variant="outlined" fullWidth margin="normal" />
+    </Box>,
+  ];
 
-    return (
-        <Box sx={{ p: 3 }}>
-            <Typography variant="h1" gutterBottom>
-                Stepper
-            </Typography>
-            <Typography color="text.secondary" sx={{ mb: 4 }}>
-                Stepper는 사용자가 여러 단계를 거쳐 작업을 완료하도록 안내합니다.
-            </Typography>
+  const horizontalCode = `
+const steps: StepItem[] = [
+  { label: 'Select campaign settings' },
+  { label: 'Create an ad group', optional: true },
+  { label: 'Create an ad' },
+];
 
-            <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-                Horizontal Stepper Example
-            </Typography>
-            <DsStepper steps={steps} stepContents={stepContents} />
+const stepContents: React.ReactNode[] = [
+  <div>Content for Step 1</div>,
+  <div>Content for Step 2</div>,
+  <div>Content for Step 3</div>,
+];
 
-            <Typography variant="h6" gutterBottom sx={{ mt: 6 }}>
-                Vertical Stepper Example
-            </Typography>
-            <DsStepper
-                steps={steps}
-                stepContents={stepContents}
-                orientation="vertical"
-            />
-        </Box>
-    );
+<DsStepper steps={steps} stepContents={stepContents} />
+  `;
+
+  const verticalCode = `
+const steps: StepItem[] = [
+  { label: 'Select campaign settings' },
+  { label: 'Create an ad group', optional: true },
+  { label: 'Create an ad' },
+];
+
+const stepContents: React.ReactNode[] = [
+  <div>Content for Step 1</div>,
+  <div>Content for Step 2</div>,
+  <div>Content for Step 3</div>,
+];
+
+<DsStepper
+  steps={steps}
+  stepContents={stepContents}
+  orientation="vertical"
+/>
+  `;
+
+  const alternativeLabelCode = `
+const steps: StepItem[] = [
+  { label: 'Select campaign settings' },
+  { label: 'Create an ad group', optional: true },
+  { label: 'Create an ad' },
+];
+
+const stepContents: React.ReactNode[] = [
+  <div>Content for Step 1</div>,
+  <div>Content for Step 2</div>,
+  <div>Content for Step 3</div>,
+];
+
+<DsStepper
+  steps={steps}
+  stepContents={stepContents}
+  alternativeLabel
+/>
+  `;
+
+  return (
+    <Stack spacing={4}>
+      <ComponentShowcase
+        title="Horizontal Stepper"
+        description="The default stepper displays progress horizontally."
+        component={
+          <DsStepper steps={steps} stepContents={stepContents} />
+        }
+        code={horizontalCode}
+      />
+      <ComponentShowcase
+        title="Vertical Stepper"
+        description="Steppers can be displayed vertically by setting the orientation prop."
+        component={
+          <DsStepper
+            steps={steps}
+            stepContents={stepContents}
+            orientation="vertical"
+          />
+        }
+        code={verticalCode}
+      />
+      <ComponentShowcase
+        title="Alternative Label Stepper"
+        description="The alternativeLabel prop positions the label below the step icon."
+        component={
+          <DsStepper
+            steps={steps}
+            stepContents={stepContents}
+            alternativeLabel
+          />
+        }
+        code={alternativeLabelCode}
+      />
+    </Stack>
+  );
 };
 
 export default StepperPage;

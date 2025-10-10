@@ -1,7 +1,7 @@
 // D:/ds_mui_new/src/mobile/template/MobileBoardDetail.tsx
 
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
     Box,
     Divider,
@@ -29,7 +29,6 @@ const comments = [
 
 export default function MobileBoardDetailPage() {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const post = posts.find(p => p.id === id);
 
     if (!post) {

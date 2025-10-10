@@ -5,7 +5,6 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import {
     Box,
     Stack,
-    SelectChangeEvent,
     Tabs,
     Tab,
     // ★ 1. AppBar를 import 목록에서 제거합니다.
@@ -156,7 +155,6 @@ const UserSearchForm = () => {
 
 /** 탭 3: 권한 그룹 검색 폼 */
 const AuthGroupSearchForm = () => {
-    const navigate = useNavigate();
     const [groupCode, setGroupCode] = useState('');
     const [groupName, setGroupName] = useState('');
 
