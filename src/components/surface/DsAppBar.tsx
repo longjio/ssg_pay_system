@@ -8,7 +8,7 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-export interface DsAppBarProps extends Omit<MuiAppBarProps, 'children' | 'title'> { // <-- Changed this line
+export interface DsAppBarProps extends Omit<MuiAppBarProps, 'title'> { // <-- Changed this line
     /**
      * The title to display in the AppBar.
      * @default 'News'
@@ -37,6 +37,7 @@ export interface DsAppBarProps extends Omit<MuiAppBarProps, 'children' | 'title'
      * @default 'inherit'
      */
     actionButtonColor?: ButtonProps['color'];
+    children?: React.ReactNode;
 }
 
 export function DsAppBar({
@@ -47,37 +48,40 @@ export function DsAppBar({
                              onActionButtonClick,
                              actionButtonColor = 'inherit',
                              position = 'static', // Default position from MUI demo
+                             children,
                              ...rest
                          }: DsAppBarProps) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position={position} {...rest}>
-                <Toolbar>
-                    {showMenuButton && (
-                        <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                            onClick={onMenuClick}
+                {children ? children : (
+                    <Toolbar>
+                        {showMenuButton && (
+                            <IconButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="menu"
+                                sx={{ mr: 2 }}
+                                onClick={onMenuClick}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        )}
+                        <Typography
+                            variant="h6"
+                            component="div"
+                            sx={{ flexGrow: 1 }}
                         >
-                            <MenuIcon />
-                        </IconButton>
-                    )}
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1 }}
-                    >
-                        {title}
-                    </Typography>
-                    {actionButtonText && (
-                        <Button color={actionButtonColor} onClick={onActionButtonClick}>
-                            {actionButtonText}
-                        </Button>
-                    )}
-                </Toolbar>
+                            {title}
+                        </Typography>
+                        {actionButtonText && (
+                            <Button color={actionButtonColor} onClick={onActionButtonClick}>
+                                {actionButtonText}
+                            </Button>
+                        )}
+                    </Toolbar>
+                )}
             </AppBar>
         </Box>
     );

@@ -1,25 +1,23 @@
-// src/pages/AppBarPage.tsx
 
-import React, { useState } from 'react'; // useState 추가
+import React, { useState } from 'react';
 import {
     Box,
     Typography,
-    Container,
-    Paper,
-    AppBar,
     Toolbar,
     IconButton,
     InputBase,
-    Menu, // Menu 추가
-    MenuItem // MenuItem 추가
+    Menu,
+    MenuItem,
+    Stack
 } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle'; // AccountCircle 아이콘 추가
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import { DsAppBar } from '../components/surface/DsAppBar';
+import ComponentShowcase from '../components/common/ComponentShowcase';
 
-// --- SearchAppBar를 위한 스타일 컴포넌트 정의 (기존 코드 유지) ---
+// --- SearchAppBar styles (from original file) ---
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -60,29 +58,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
-// --- 스타일 컴포넌트 정의 끝 ---
+// --- End of styles ---
 
 const AppBarPage = () => {
-    // 기존 핸들러들
-    const handleMenuClick = () => {
-        alert('메뉴 아이콘 클릭됨!');
-    };
-
-    const handleLoginClick = () => {
-        alert('로그인 버튼 클릭됨!');
-    };
-
-    // const handleCustomActionClick = () => { // 이 핸들러는 아래 예제에서 사용되지 않으므로 주석 처리 또는 삭제 가능
-    //     alert('사용자 정의 액션 버튼 클릭됨!');
-    // };
-
-    const handleSearchAppBarMenuClick = () => {
-        alert('검색 AppBar 메뉴 아이콘 클릭됨!');
-    };
-
-    // --- 프로필 메뉴를 위한 상태 및 핸들러 ---
     const [anchorElProfile, setAnchorElProfile] = useState<null | HTMLElement>(null);
     const openProfileMenu = Boolean(anchorElProfile);
+
+    const handleMenuClick = () => alert('Menu icon clicked!');
+    const handleLoginClick = () => alert('Login button clicked!');
+    const handleInfoClick = () => alert('Info button clicked!');
 
     const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElProfile(event.currentTarget);
@@ -90,153 +74,177 @@ const AppBarPage = () => {
 
     const handleProfileMenuClose = () => {
         setAnchorElProfile(null);
-        // 각 메뉴 아이템 클릭 시 추가 동작 구현 가능
     };
 
     const handleProfileMenuItemClick = (action: string) => {
-        alert(`${action} 클릭됨!`);
+        alert(`${action} clicked!`);
         handleProfileMenuClose();
     };
-    // --- 프로필 메뉴 로직 끝 ---
+
+    const basicAppBarCode = `
+<DsAppBar
+    title="Basic AppBar"
+    onMenuClick={handleMenuClick}
+    actionButtonText="Login"
+    onActionButtonClick={handleLoginClick}
+/>
+    `;
+
+    const noMenuButtonCode = `
+<DsAppBar
+    title="AppBar without Menu Button"
+    showMenuButton={false}
+    actionButtonText="Info"
+    onActionButtonClick={handleInfoClick}
+/>
+    `;
+
+    const simpleTitleCode = `
+<DsAppBar
+    title="Simple Title Bar"
+    onMenuClick={handleMenuClick}
+/>
+    `;
+
+    const searchAppBarCode = `
+// This example uses MUI's AppBar directly for customization.
+<AppBar position="static">
+    <Toolbar>
+        <IconButton color="inherit"><MenuIcon /></IconButton>
+        <Typography sx={{ flexGrow: 1 }}>Search AppBar</Typography>
+        <Search>
+            <SearchIconWrapper><SearchIcon /></SearchIconWrapper>
+            <StyledInputBase placeholder="Search..." />
+        </Search>
+    </Toolbar>
+</AppBar>
+    `;
+
+    const profileMenuAppBarCode = `
+// This example uses MUI's AppBar directly for customization.
+<AppBar position="sticky">
+    <Toolbar>
+        <IconButton color="inherit"><MenuIcon /></IconButton>
+        <Typography sx={{ flexGrow: 1 }}>Profile</Typography>
+        <div>
+            <IconButton onClick={handleProfileMenuOpen} color="inherit">
+                <AccountCircle />
+            </IconButton>
+            <Menu
+                anchorEl={anchorElProfile}
+                open={openProfileMenu}
+                onClose={handleProfileMenuClose}
+            >
+                <MenuItem onClick={() => handleProfileMenuItemClick('Profile')}>Profile</MenuItem>
+                <MenuItem onClick={() => handleProfileMenuItemClick('My account')}>My account</MenuItem>
+            </Menu>
+        </div>
+    </Toolbar>
+</AppBar>
+    `;
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column',  width: '100%', minHeight: '100vh' }}>
-            <Typography variant="h1" component="h1" gutterBottom>
-                App Bar
-            </Typography>
-            {/* 페이지 내용 */}
-            <Container maxWidth="xl" component="main" sx={{ mt: 4, mb: 2, flexGrow: 1 }}>
-                {/* 예시 1: 기본 DsAppBar (기존 코드 유지) */}
-                <DsAppBar
-                    title="기본 AppBar"
-                    onMenuClick={handleMenuClick}
-                    actionButtonText="로그인"
-                    onActionButtonClick={handleLoginClick}
-                />
-                {/* 예시 2, 3 (기존 코드 유지) ... */}
-                <Box sx={{ mt: 5 }}>
+        <Stack spacing={4}>
+            <ComponentShowcase
+                title="Basic AppBar"
+                description="A standard AppBar with a title, menu icon, and action button."
+                component={
                     <DsAppBar
-                        title="메뉴 버튼 없는 AppBar"
-                        showMenuButton={false}
-                        actionButtonText="정보"
-                        onActionButtonClick={() => alert('정보 버튼 클릭!')}
+                        title="Basic AppBar"
+                        onMenuClick={handleMenuClick}
+                        actionButtonText="Login"
+                        onActionButtonClick={handleLoginClick}
                     />
-                    {/* ... Paper 설명 ... */}
-                </Box>
-
-                <Box sx={{ mt: 5 }}>
+                }
+                code={basicAppBarCode}
+            />
+            <ComponentShowcase
+                title="AppBar without Menu Button"
+                description="An AppBar without the leading menu icon."
+                component={
                     <DsAppBar
-                        title="간단한 제목 표시줄"
+                        title="AppBar without Menu Button"
+                        showMenuButton={false}
+                        actionButtonText="Info"
+                        onActionButtonClick={handleInfoClick}
+                    />
+                }
+                code={noMenuButtonCode}
+            />
+            <ComponentShowcase
+                title="Simple Title Bar"
+                description="A simple AppBar with only a title and a menu icon."
+                component={
+                    <DsAppBar
+                        title="Simple Title Bar"
                         onMenuClick={handleMenuClick}
                     />
-                    {/* ... Paper 설명 ... */}
-                </Box>
-
-
-                {/* 예시 4: 프로필 메뉴가 있는 AppBar (MUI 데모 기반으로 수정) */}
-                <Box sx={{ mt: 5 }}>
-                    {/* 이 부분은 MUI AppBar를 직접 사용하여 구성합니다. */}
-                    <AppBar position="sticky"> {/* DsAppBar 대신 MUI AppBar 직접 사용 */}
-                        <Toolbar>
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="menu"
-                                sx={{ mr: 2 }}
-                                onClick={handleMenuClick} // 일반 메뉴 핸들러 연결
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <span role="img" aria-label="star" style={{ marginRight: '8px' }}>⭐</span>
-                                    특별한 제목
-                                </Box>
-                            </Typography>
-                            <div>
-                                <IconButton
-                                    size="large"
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar-profile"
-                                    aria-haspopup="true"
-                                    onClick={handleProfileMenuOpen}
-                                    color="inherit"
-                                >
-                                    <AccountCircle />
+                }
+                code={simpleTitleCode}
+            />
+            <ComponentShowcase
+                title="AppBar with Search"
+                description="A more complex example using MUI's native AppBar to include a search field. This demonstrates customization beyond the DsAppBar component."
+                component={
+                    <Box sx={{ flexGrow: 1 }}>
+                        <DsAppBar position="static" color="primary">
+                            <Toolbar>
+                                <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }} onClick={handleMenuClick}>
+                                    <MenuIcon />
                                 </IconButton>
-                                <Menu
-                                    id="menu-appbar-profile"
-                                    anchorEl={anchorElProfile}
-                                    anchorOrigin={{
-                                        vertical: 'bottom', // 아이콘 아래에 표시되도록 조정
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={openProfileMenu}
-                                    onClose={handleProfileMenuClose}
-                                >
-                                    <MenuItem onClick={() => handleProfileMenuItemClick('Profile')}>Profile</MenuItem>
-                                    <MenuItem onClick={() => handleProfileMenuItemClick('My account')}>My account</MenuItem>
-                                    <MenuItem onClick={() => handleProfileMenuItemClick('Logout')}>Logout</MenuItem>
-                                </Menu>
-                            </div>
-                        </Toolbar>
-                    </AppBar>
-                    <Paper sx={{ p: 2, mt: 2, height: '150px', overflowY: 'auto' }}>
-                        <Typography>
-                            이 AppBar는 MUI의 <code>AppBar</code>를 직접 사용하여 프로필 아이콘 클릭 시 메뉴가
-                            나타나는 기능을 구현했습니다. <code>position="sticky"</code>로 설정되어 스크롤 시
-                            상단에 고정됩니다.
-                        </Typography>
-                        <Typography>스크롤을 위한 컨텐츠</Typography>
-                    </Paper>
-                </Box>
-
-                {/* 예시 5: 검색창이 있는 AppBar (기존 코드 유지) ... */}
-                <Box sx={{ mt: 5 }}>
-                    <AppBar position="static" color="primary">
-                        <Toolbar>
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                                onClick={handleSearchAppBarMenuClick}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography
-                                variant="h6"
-                                noWrap
-                                component="div"
-                                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                            >
-                                검색 AppBar
-                            </Typography>
-                            <Search>
-                                <SearchIconWrapper>
-                                    <SearchIcon />
-                                </SearchIconWrapper>
-                                <StyledInputBase
-                                    placeholder="검색…"
-                                    inputProps={{ 'aria-label': 'search' }}
-                                />
-                            </Search>
-                        </Toolbar>
-                    </AppBar>
-                    {/* ... Paper 설명 ... */}
-                </Box>
-
-            </Container>
-
-            {/* 푸터 (기존 코드 유지) ... */}
-        </Box>
+                                <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+                                    Search AppBar
+                                </Typography>
+                                <Search>
+                                    <SearchIconWrapper>
+                                        <SearchIcon />
+                                    </SearchIconWrapper>
+                                    <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+                                </Search>
+                            </Toolbar>
+                        </DsAppBar>
+                    </Box>
+                }
+                code={searchAppBarCode}
+            />
+            <ComponentShowcase
+                title="AppBar with Profile Menu"
+                description="Another custom example showing how to integrate a profile icon with a dropdown menu."
+                component={
+                    <Box sx={{ flexGrow: 1 }}>
+                         <DsAppBar position="sticky">
+                            <Toolbar>
+                                <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }} onClick={handleMenuClick}>
+                                    <MenuIcon />
+                                </IconButton>
+                                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                                    Profile
+                                </Typography>
+                                <div>
+                                    <IconButton size="large" onClick={handleProfileMenuOpen} color="inherit">
+                                        <AccountCircle />
+                                    </IconButton>
+                                    <Menu
+                                        id="menu-appbar-profile"
+                                        anchorEl={anchorElProfile}
+                                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                        keepMounted
+                                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                        open={openProfileMenu}
+                                        onClose={handleProfileMenuClose}
+                                    >
+                                        <MenuItem onClick={() => handleProfileMenuItemClick('Profile')}>Profile</MenuItem>
+                                        <MenuItem onClick={() => handleProfileMenuItemClick('My account')}>My account</MenuItem>
+                                        <MenuItem onClick={() => handleProfileMenuItemClick('Logout')}>Logout</MenuItem>
+                                    </Menu>
+                                </div>
+                            </Toolbar>
+                        </DsAppBar>
+                    </Box>
+                }
+                code={profileMenuAppBarCode}
+            />
+        </Stack>
     );
 };
 
