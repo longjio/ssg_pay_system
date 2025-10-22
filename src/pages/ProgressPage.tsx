@@ -1,77 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import DsProgress from '../components/feedback/DsProgress';
+import ComponentShowcase from '../components/common/ComponentShowcase';
 
-// 원형 프로그레스 예제
-const CircularProgressExample = () => (
-    <>
-        <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-            Circular Progress
-        </Typography>
-        <Stack spacing={2} direction="row" sx={{ mb: 2 }}>
-            <DsProgress />
-            <DsProgress color="secondary" />
-            <DsProgress color="success" />
-            <DsProgress color="error" />
-        </Stack>
-    </>
-);
-
-// 확정적 원형 프로그레스 예제
-const CircularDeterminateExample = ({ progress }: { progress: number }) => (
-    <>
-        <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-            Circular Determinate
-        </Typography>
-        <Stack spacing={2} direction="row">
-            <DsProgress variant="circular" value={progress} />
-            <DsProgress variant="circular" withLabel value={progress} color="success" />
-        </Stack>
-    </>
-);
-
-// 선형 프로그레스 예제
-const LinearProgressExample = () => (
-    <>
-        <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-            Linear Progress
-        </Typography>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-            <DsProgress variant="linear" />
-        </Stack>
-    </>
-);
-
-// 확정적 선형 프로그레스 예제
-const LinearDeterminateExample = ({ progress }: { progress: number }) => (
-    <>
-        <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-            Linear Determinate
-        </Typography>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-            <DsProgress variant="linear" value={progress} />
-            <DsProgress variant="linear" withLabel value={progress} color="success" />
-        </Stack>
-    </>
-);
-
-// --- 신규 추가: 선형 버퍼 프로그레스 예제 ---
-const LinearBufferExample = () => {
-    const [progress, setProgress] = useState(0);
+const ProgressPage = () => {
+    const [progress, setProgress] = useState(10);
+    const [bufferProgress, setBufferProgress] = useState(0);
     const [buffer, setBuffer] = useState(10);
 
-    // setInterval 내에서 최신 state를 참조하기 위해 ref를 사용하는 패턴
+    // Determinate progress timer
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setProgress((prev) => (prev >= 100 ? 10 : prev + 10));
+        }, 800);
+        return () => clearInterval(timer);
+    }, []);
+
+    // Buffer progress timer
     const progressRef = useRef(() => {});
     useEffect(() => {
         progressRef.current = () => {
-            if (progress >= 100) {
-                setProgress(0);
+            if (bufferProgress >= 100) {
+                setBufferProgress(0);
                 setBuffer(10);
             } else {
-                const newProgress = progress + 1;
-                setProgress(newProgress);
+                const newProgress = bufferProgress + 1;
+                setBufferProgress(newProgress);
 
-                // 버퍼 값을 불규칙하게 증가시켜 실제 버퍼링처럼 보이게 함
                 if (newProgress % 5 === 0 && buffer < 100) {
                     const newBuffer = buffer + 1 + Math.random() * 10;
                     setBuffer(newBuffer > 100 ? 100 : newBuffer);
@@ -83,64 +38,126 @@ const LinearBufferExample = () => {
     useEffect(() => {
         const timer = setInterval(() => {
             progressRef.current();
-        }, 100); // 0.1초마다 업데이트
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
-
-    return (
-        <>
-            <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-                Linear Buffer
-            </Typography>
-            <Stack spacing={2} sx={{ width: '100%' }}>
-                <DsProgress variant="buffer" value={progress} valueBuffer={buffer} />
-            </Stack>
-        </>
-    );
-};
-
-// 커스텀 크기 및 두께 예제
-const CustomSizeExample = () => (
-    <>
-        <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-            Custom Size & Thickness
-        </Typography>
-        <Stack spacing={2} direction="row" alignItems="center">
-            <DsProgress size={60} />
-            <DsProgress size={80} thickness={5} color="secondary" />
-            <DsProgress variant="circular" withLabel value={75} size={100} thickness={2} />
-        </Stack>
-    </>
-);
-
-const ProgressPage = () => {
-    const [progress, setProgress] = useState(10);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((prev) => (prev >= 100 ? 10 : prev + 10));
-        }, 800);
+        }, 100);
         return () => clearInterval(timer);
     }, []);
 
+
+    const circularProgressCode = `
+<DsProgress />
+<DsProgress color="secondary" />
+<DsProgress color="success" />
+<DsProgress color="error" />
+    `;
+
+    const circularDeterminateCode = `
+<DsProgress variant="circular" value={progress} />
+<DsProgress variant="circular" withLabel value={progress} color="success" />
+    `;
+
+    const linearProgressCode = `
+<DsProgress variant="linear" />
+    `;
+
+    const linearDeterminateCode = `
+<DsProgress variant="linear" value={progress} />
+<DsProgress variant="linear" withLabel value={progress} color="success" />
+    `;
+
+    const linearBufferCode = `
+<DsProgress variant="buffer" value={bufferProgress} valueBuffer={buffer} />
+    `;
+
+    const customSizeCode = `
+<DsProgress size={60} />
+<DsProgress size={80} thickness={5} color="secondary" />
+<DsProgress variant="circular" withLabel value={75} size={100} thickness={2} />
+    `;
+
     return (
-        <Box sx={{ p: 3 }}>
-            <Typography variant="h1" gutterBottom>
-                Progress
-            </Typography>
-            <Typography color="text.secondary" sx={{ mb: 4 }}>
-                Progress indicator(진행 표시기)는 지정되지 않은 대기 시간을 알리거나 작업의 진행률을 표시합니다.
-            </Typography>
-            <CircularProgressExample />
-            <CircularDeterminateExample progress={progress} />
-            <LinearProgressExample />
-            <LinearDeterminateExample progress={progress} />
-            <LinearBufferExample /> {/* 새로 추가된 예제를 여기에 배치 */}
-            <CustomSizeExample />
-        </Box>
+        <Stack spacing={4} sx={{ p: 3 }}>
+            <Box>
+                <Typography variant="h1" gutterBottom>
+                    Progress
+                </Typography>
+                <Typography color="text.secondary" sx={{ mb: 4 }}>
+                    Progress indicator(진행 표시기)는 지정되지 않은 대기 시간을 알리거나 작업의 진행률을 표시합니다.
+                </Typography>
+            </Box>
+
+            <ComponentShowcase
+                title="Circular Progress"
+                description="원형 진행 표시기는 빙글빙글 돌며 진행 상태를 나타냅니다."
+                component={
+                    <Stack spacing={2} direction="row">
+                        <DsProgress />
+                        <DsProgress color="secondary" />
+                        <DsProgress color="success" />
+                        <DsProgress color="error" />
+                    </Stack>
+                }
+                code={circularProgressCode}
+            />
+
+            <ComponentShowcase
+                title="Circular Determinate"
+                description="확정적 원형 진행 표시기는 작업의 완료율을 명확하게 보여줍니다."
+                component={
+                    <Stack spacing={2} direction="row">
+                        <DsProgress variant="circular" value={progress} />
+                        <DsProgress variant="circular" withLabel value={progress} color="success" />
+                    </Stack>
+                }
+                code={circularDeterminateCode}
+            />
+
+            <ComponentShowcase
+                title="Linear Progress"
+                description="선형 진행 표시기는 가로 막대를 통해 진행 상태를 나타냅니다."
+                component={
+                    <Stack spacing={2} sx={{ width: '100%' }}>
+                        <DsProgress variant="linear" />
+                    </Stack>
+                }
+                code={linearProgressCode}
+            />
+
+            <ComponentShowcase
+                title="Linear Determinate"
+                description="확정적 선형 진행 표시기는 작업의 완료율을 선형 막대로 보여줍니다."
+                component={
+                    <Stack spacing={2} sx={{ width: '100%' }}>
+                        <DsProgress variant="linear" value={progress} />
+                        <DsProgress variant="linear" withLabel value={progress} color="success" />
+                    </Stack>
+                }
+                code={linearDeterminateCode}
+            />
+
+            <ComponentShowcase
+                title="Linear Buffer"
+                description="버퍼링 진행 표시기는 주 진행률과 버퍼링 진행률을 함께 보여줍니다."
+                component={
+                    <Stack spacing={2} sx={{ width: '100%' }}>
+                        <DsProgress variant="buffer" value={bufferProgress} valueBuffer={buffer} />
+                    </Stack>
+                }
+                code={linearBufferCode}
+            />
+
+            <ComponentShowcase
+                title="Custom Size & Thickness"
+                description="size와 thickness 속성을 사용하여 진행 표시기의 크기와 두께를 조절할 수 있습니다."
+                component={
+                    <Stack spacing={2} direction="row" alignItems="center">
+                        <DsProgress size={60} />
+                        <DsProgress size={80} thickness={5} color="secondary" />
+                        <DsProgress variant="circular" withLabel value={75} size={100} thickness={2} />
+                    </Stack>
+                }
+                code={customSizeCode}
+            />
+        </Stack>
     );
 };
 

@@ -37,8 +37,38 @@ export default function MainLayout() {
     const [activeIconMenuId, setActiveIconMenuId] = useState<string>('foundations'); // 활성 아이콘 메뉴 상태 추가
 
     // --- 핸들러 함수들 (기존과 동일) ---
-    useEffect(() => { const currentItem = routableItems.find(item => item.path === location.pathname); if (currentItem) { setActiveTab(currentItem.path ?? null); if (!openTabs.some(tab => tab.id === currentItem.id)) { setOpenTabs(prev => [...prev, currentItem]); } } else { setActiveTab(location.pathname); } }, [location.pathname, openTabs]);
-    useEffect(() => { const homeItem = routableItems.find(item => item.path === '/app'); if (homeItem) { setOpenTabs([homeItem]); setActiveTab(homeItem.path ?? null); if (location.pathname === '/' || location.pathname === '/ssg_pay_system/') { navigate('/app', { replace: true }); } } }, [location.pathname, navigate]);
+        useEffect(() => {
+        // 1. URL에 따라 현재 메뉴 아이템을 찾습니다.
+        const currentItem = routableItems.find(item => item.path === location.pathname);
+
+        // 2. 탭이 하나도 열려있지 않은 초기 상태인지 확인합니다.
+        if (openTabs.length === 0) {
+            const homeItem = routableItems.find(item => item.path === '/app');
+            const initialTabs = [];
+            if (homeItem) {
+                initialTabs.push(homeItem);
+            }
+            // 현재 아이템이 홈 아이템과 다를 경우 탭에 추가합니다.
+            if (currentItem && currentItem.id !== homeItem?.id) {
+                initialTabs.push(currentItem);
+            }
+            // 초기 탭 목록을 설정합니다.
+            setOpenTabs(initialTabs);
+        } else {
+            // 3. 이미 탭이 열려 있는 경우, 현재 URL에 해당하는 탭이 없으면 새로 추가합니다.
+            if (currentItem && !openTabs.some(tab => tab.id === currentItem.id)) {
+                setOpenTabs(prev => [...prev, currentItem]);
+            }
+        }
+
+        // 4. 현재 URL을 활성 탭으로 설정합니다.
+        setActiveTab(location.pathname);
+
+        // 5. 최상위 경로일 경우 /app으로 리다이렉트합니다.
+        if (location.pathname === '/' || location.pathname === '/ssg_pay_system/') {
+            navigate('/app', { replace: true });
+        }
+    }, [location.pathname, navigate]); // openTabs 종속성을 제거하여 무한 루프 가능성을 없앱니다.
     const handleDrawerToggle = () => { if (isMobile) { setMobileDrawerOpen(!isMobileDrawerOpen); } else { setDesktopDrawerOpen(!isDesktopDrawerOpen); } };
     const handleMenuClick = useCallback((item: MenuItem) => { if (item.path) { navigate(item.path); } if (isMobile) { setMobileDrawerOpen(false); } }, [navigate, isMobile]);
 

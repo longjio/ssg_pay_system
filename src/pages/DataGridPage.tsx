@@ -3,6 +3,7 @@
 import React from 'react';
 import { Stack, Typography, Box } from '@mui/material';
 import DsDataGrid from '../components/mui_x/datagrid/DsDataGrid';
+import ComponentShowcase from '../components/common/ComponentShowcase';
 // 사용자 정의 타입을 가져옵니다. 이 타입들이 실제 MUI X DataGrid와 호환되는지 확인이 중요합니다.
 import type { GridValueGetterParams, GridColDef } from '../types/mui-grid';
 
@@ -73,42 +74,73 @@ const rows: RowData[] = [
 ];
 
 const DataGridPage = () => {
+
+    const basicDataGridCode = `
+<DsDataGrid
+    rows={rows}
+    columns={columns}
+/>
+    `;
+
+    const optionsDataGridCode = `
+<DsDataGrid
+    rows={rows}
+    columns={columns}
+    pageSizeOptions={[5, 10, 20]}
+    initialState={{
+        pagination: {
+            paginationModel: {
+                pageSize: 10,
+            },
+        },
+    }}
+    autoHeight
+    checkboxSelection={false}
+/>
+    `;
+
     return (
         <Stack spacing={4} sx={{ p: 3 }}>
-            <Typography variant="h1" component="h1" gutterBottom>DataGrid
-            </Typography>
-
             <Box>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    기본 DsDataGrid 예시
+                <Typography variant="h1" component="h1" gutterBottom>DataGrid</Typography>
+                <Typography color="text.secondary">
+                    DataGrid는 대량의 데이터를 테이블 형태로 표시하고 정렬, 페이징, 필터링 등 다양한 인터랙션을 제공하는 컴포넌트입니다.
                 </Typography>
-                <DsDataGrid
-                    rows={rows}
-                    columns={columns}
-                    // ✅ sx prop 제거
-                />
             </Box>
 
-            <Box>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    페이지 크기 옵션 변경 및 자동 높이 조절 예시
-                </Typography>
-                <DsDataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSizeOptions={[5, 10, 20]}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 10,
+            <ComponentShowcase
+                title="기본 DsDataGrid 예시"
+                description="가장 기본적인 형태의 데이터 그리드입니다. 'rows'와 'columns' prop을 전달하여 데이터를 표시합니다."
+                component={
+                    <DsDataGrid
+                        rows={rows}
+                        columns={columns}
+                    />
+                }
+                code={basicDataGridCode}
+            />
+
+            <ComponentShowcase
+                title="페이지 크기 옵션 변경 및 자동 높이 조절 예시"
+                description="'pageSizeOptions'로 페이지당 행 수 옵션을, 'initialState'로 초기 페이지 크기를 설정할 수 있습니다. 'autoHeight'를 사용하면 컨텐츠 높이에 맞춰 그리드 높이가 자동으로 조절됩니다."
+                component={
+                    <DsDataGrid
+                        rows={rows}
+                        columns={columns}
+                        pageSizeOptions={[5, 10, 20]}
+                        initialState={{
+                            pagination: {
+                                paginationModel: {
+                                    pageSize: 10,
+                                },
                             },
-                        },
-                    }}
-                    autoHeight
-                    checkboxSelection={false}
-                    // ✅ sx prop 제거
-                />
-            </Box>
+                        }}
+                        autoHeight
+                        checkboxSelection={false}
+                    />
+                }
+                code={optionsDataGridCode}
+            />
         </Stack>
     );
 };
