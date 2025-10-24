@@ -4,6 +4,7 @@ import { SvgIconProps } from '@mui/material/SvgIcon';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import { routableItems } from '../../menu-data'; // 자동 모드를 위해 메뉴 데이터 import
+import { BodyXS } from '../typography';
 
 // Breadcrumb 항목 하나의 데이터 타입을 정의합니다.
 export interface BreadcrumbItem {
@@ -47,8 +48,10 @@ const DsBreadcrumbs: React.FC<DsBreadcrumbsProps> = ({ items, ...otherProps }) =
                                 sx={{ display: 'flex', alignItems: 'center' }}
                                 color="text.primary"
                             >
-                                {iconWithStyle}
-                                {item.label}
+                                <BodyXS sx={{ display: 'flex', alignItems: 'center' }}>
+                                    {iconWithStyle}
+                                    {item.label}
+                                </BodyXS>
                             </Typography>
                         );
                     }
@@ -62,8 +65,10 @@ const DsBreadcrumbs: React.FC<DsBreadcrumbsProps> = ({ items, ...otherProps }) =
                             color="inherit"
                             sx={{ display: 'flex', alignItems: 'center' }}
                         >
-                            {iconWithStyle}
-                            {item.label}
+                            <BodyXS sx={{ display: 'flex', alignItems: 'center' }}>
+                                {iconWithStyle}
+                                {item.label}
+                            </BodyXS>
                         </MuiLink>
                     );
                 })}
@@ -89,8 +94,10 @@ const DsBreadcrumbs: React.FC<DsBreadcrumbsProps> = ({ items, ...otherProps }) =
                 color="inherit"
                 to="/app"
             >
-                <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                {pathNameMap.get('/app') || 'Home'}
+                <BodyXS sx={{ display: 'flex', alignItems: 'center' }}>
+                    <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    {pathNameMap.get('/app') || 'Home'}
+                </BodyXS>
             </MuiLink>
             {/* URL 경로 조각들을 순회하며 Breadcrumb 링크를 생성합니다. */}
             {pathnames.map((value, index) => {
@@ -107,11 +114,11 @@ const DsBreadcrumbs: React.FC<DsBreadcrumbsProps> = ({ items, ...otherProps }) =
 
                 return isLast ? (
                     <Typography key={to} sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
-                        {name}
+                        <BodyXS>{name}</BodyXS>
                     </Typography>
                 ) : (
                     <MuiLink key={to} component={RouterLink} to={to} underline="hover" color="inherit">
-                        {name}
+                        <BodyXS>{name}</BodyXS>
                     </MuiLink>
                 );
             })}

@@ -186,7 +186,7 @@ export default function MenuConfigPage() {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', p: 3, boxSizing: 'border-box' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
             <TitleArea title="메뉴 관리">
                 <PrintButton onClick={() => alert('인쇄 버튼 클릭')} />
                 <ResetButton onClick={handleReset} />

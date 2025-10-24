@@ -66,9 +66,22 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
+    const isActive = value === index;
     return (
-        <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other} style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
-            {value === index && (<Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', pt: 2, height: '100%' }}>{children}</Box>)}
+        <div
+            role="tabpanel"
+            hidden={!isActive}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+            style={{
+                flex: isActive ? 1 : 0,
+                display: isActive ? 'flex' : 'none',
+                flexDirection: 'column',
+                minHeight: 0
+            }}
+        >
+            {isActive && (<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', pt: 2, minHeight: 0 }}>{children}</Box>)}
         </div>
     );
 }
@@ -191,7 +204,7 @@ export default function TabsGridPage() {
     const visibleRows = useMemo(() => { const rowMap = new Map(rows.map(row => [row.id, row])); return rows.filter(row => { let parent = row.parentId ? rowMap.get(row.parentId) : null; while (parent) { if (!expandedIds.has(parent.id)) { return false; } parent = parent.parentId ? rowMap.get(parent.parentId) : null; } return true; }); }, [rows, expandedIds]);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', p: 3, boxSizing: 'border-box' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
             <TitleArea title="지불이관 명세서">
                 <SearchButton onClick={handleSearch} />
                 <PrintButton onClick={() => alert('인쇄 버튼 클릭')} />
@@ -202,25 +215,40 @@ export default function TabsGridPage() {
                 <Box sx={{ flexGrow: 1 }}>
                     <Stack spacing={2}>
                         {/* Row 1 */}
-                        <Stack direction="row" spacing={3.75}>
+                        <Stack direction="row" sx={{ flexWrap: 'wrap', columnGap: '16px', rowGap: '8px' }}>
                             <SearchFormField label="지불회계단위" codeValue={accountingUnitCode} onCodeChange={(e) => setAccountingUnitCode(e.target.value)} codePlaceholder="코드" nameValue={accountingUnitName} namePlaceholder="회계단위명" onSearchClick={handleSearchAccountingUnit} />
                             <SearchFormField label="발생회계단위" codeValue={accrualUnitCode} onCodeChange={(e) => setAccrualUnitCode(e.target.value)} codePlaceholder="코드" nameValue={accrualUnitName} namePlaceholder="회계단위명" onSearchClick={handleSearchAccrualUnit} />
                             <FormField label="지불이관일자" htmlFor="transfer-date-picker">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker value={transferDate} onChange={(newValue) => setTransferDate(newValue)} sx={{ width: '170px' }} slotProps={{ textField: { id: 'transfer-date-picker', size: 'small' } }} />
+                                    <DatePicker
+                                        value={transferDate}
+                                        onChange={(newValue) => setTransferDate(newValue)}
+                                        sx={{ width: '170px' }}
+                                        slotProps={{
+                                            textField: {
+                                                id: 'transfer-date-picker',
+                                                size: 'small',
+                                                sx: {
+                                                    '& .MuiInputBase-root': {
+                                                        height: '34px'
+                                                    }
+                                                }
+                                            }
+                                        }}
+                                    />
                                 </LocalizationProvider>
                             </FormField>
                             <SearchFormField label="거래구분" codeValue={transactionType} onCodeChange={(e) => setTransactionType(e.target.value)} codePlaceholder="코드" nameValue={transactionTypeName} namePlaceholder="거래구분명" onSearchClick={handleSearchTransactionType} />
                         </Stack>
                         {/* Row 2 */}
-                        <Stack direction="row" spacing={3.75}>
+                        <Stack direction="row" sx={{ flexWrap: 'wrap', columnGap: '16px', rowGap: '8px' }}>
                             <SearchFormField label="지불유형" codeValue={menuId} onCodeChange={(e) => setMenuId(e.target.value)} codePlaceholder="유형코드" nameValue={menuName} namePlaceholder="유형명" onSearchClick={handleSearchMenu} />
                             <SearchFormField label="주기코드" codeValue={cycleCode} onCodeChange={(e) => setCycleCode(e.target.value)} codePlaceholder="코드" nameValue={cycleName} namePlaceholder="주기명" onSearchClick={handleSearchCycle} />
                             <SearchFormField label="주기회차" codeValue={cycleCount} onCodeChange={(e) => setCycleCount(e.target.value)} codePlaceholder="회차" nameValue="" onSearchClick={handleSearchCycleCount} hideNameField={true} codeTextFieldProps={{ sx: { width: '132px' } }} />
                             <SearchFormField label="통화코드" codeValue={cycleCount} onCodeChange={(e) => setCycleCount(e.target.value)} codePlaceholder="회차" nameValue="" onSearchClick={handleSearchCycleCount} hideNameField={true} codeTextFieldProps={{ sx: { width: '120px' } }} />
                         </Stack>
                         {/* Row 3 */}
-                        <Stack direction="row" spacing={3.75}>
+                        <Stack direction="row" sx={{ flexWrap: 'wrap', columnGap: '16px', rowGap: '8px' }}>
                             <FormField label="조회기준" htmlFor="usage-status-group">
                                 <RadioGroup row id="usage-status-group" value={isUsed} onChange={(e) => setIsUsed(e.target.value)} sx={{ height: '34px', alignItems: 'center', width: '282px' }}>
                                     {usageStatusOptions.map((option) => (
@@ -241,7 +269,7 @@ export default function TabsGridPage() {
                     <Tab label="보류분 지불 명세서" id="grid-tab-2" aria-controls="grid-tabpanel-2" />
                 </Tabs>
             </Box>
-            <Box sx={{ flexGrow: 1, overflow: 'hidden', display: 'flex' }}>
+            <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                 <TabPanel value={tabValue} index={0}>
                     <DsDataGrid
                         rows={paymentInitialRows}

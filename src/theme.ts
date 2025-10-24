@@ -93,6 +93,16 @@ const commonSettings = (mode: PaletteMode): ThemeOptions => ({
                 }
             },
         },
+        MuiToolbar: {
+            styleOverrides: {
+                root: {
+                    minHeight: '52px !important',
+                    '@media (min-width:600px)': {
+                        minHeight: '52px !important',
+                    },
+                },
+            },
+        },
         MuiPaper: {
             styleOverrides: {
                 root: ({ theme }: { theme: Theme }) => ({

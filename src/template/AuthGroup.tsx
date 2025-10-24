@@ -129,7 +129,7 @@ export default function AuthGroupPage() {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', p: 3, boxSizing: 'border-box' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
             {/* --- 상단 제목 및 조회 영역 --- */}
             <TitleArea title="권한그룹 관리">
                 <ResetButton onClick={handleReset} />

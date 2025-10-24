@@ -123,7 +123,7 @@ export default function MainLayout() {
                 }}
             >
                 {/* Header의 높이만큼 공간을 만들어 IconSidebar가 겹치지 않게 합니다. */}
-                <Toolbar />
+                <Toolbar sx={{ minHeight: '52px !important', height: '52px' }} />
                 <IconSidebar onMenuClick={handleIconMenuClick} activeIconMenuId={activeIconMenuId} />
 
             </Box>
@@ -138,24 +138,26 @@ export default function MainLayout() {
                     // Drawer의 열림/닫힘 상태에 따라 너비를 동적으로 변경합니다.
                     width: { sm: isDesktopDrawerOpen ? drawerWidth : 0 },
                     flexShrink: 0,
-                    transition: theme.transitions.create('width', {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.enteringScreen,
-                    }),
                     [`& .MuiDrawer-paper`]: {
-                        // Drawer의 내용물(Paper)은 부모의 너비를 100% 채우고,
-                        // 위치를 상대적으로 설정하여 Flexbox 흐름을 따르게 합니다.
-                        position: 'relative',
-                        width: '100%',
-                        overflowX: 'hidden',
+                        // Drawer의 Paper도 동일한 너비를 가지도록 설정
+                        width: { sm: isDesktopDrawerOpen ? drawerWidth : 0 },
+                        overflow: 'hidden', // 이중 스크롤 방지
                         borderLeft: 'none',
-                        // Header 아래에 위치하도록 상단 공간 확보
-                        top: { sm: '52px' },
-                        height: { sm: 'calc(100% - 52px)' },
+                        borderRight: 1,
+                        borderColor: 'divider',
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        // transition을 Paper에 적용하여 부드러운 애니메이션
+                        transition: theme.transitions.create('width', {
+                            easing: theme.transitions.easing.sharp,
+                            duration: theme.transitions.duration.enteringScreen,
+                        }),
                     },
                 }}
             >
-                {isMobile && <Toolbar />}
+                {/* IconSidebar처럼 Toolbar를 추가하여 Header 높이 확보 */}
+                <Toolbar sx={{ flexShrink: 0, minHeight: '52px !important', height: '52px' }} />
                 <DrawerContent menuData={activeSubMenu?.items || []} onMenuClick={handleMenuClick} />
             </Drawer>
 
@@ -197,24 +199,28 @@ export default function MainLayout() {
                     </Box>
                 )}
                 {/* 실제 페이지 콘텐츠는 내부에서 스크롤되도록 overflow: 'auto'를 유지합니다. */}
-                <Box sx={{ flexGrow: 1, p: 3, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-                    <DsBreadcrumbs />
-                    <Suspense fallback={<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress /></Box>}>
-                        <Routes>
-                            {routableItems.map(item => {
-                                if (item.component && item.path) {
-                                    const PageComponent = item.component;
-                                    let relativePath = item.path.substring('/app'.length);
-                                    if (relativePath.startsWith('/')) {
-                                        relativePath = relativePath.substring(1);
+                <Box sx={{ flexGrow: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{ px: 3, pt: 2, pb: 1 }}>
+                        <DsBreadcrumbs />
+                    </Box>
+                    <Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+                        <Suspense fallback={<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress /></Box>}>
+                            <Routes>
+                                {routableItems.map(item => {
+                                    if (item.component && item.path) {
+                                        const PageComponent = item.component;
+                                        let relativePath = item.path.substring('/app'.length);
+                                        if (relativePath.startsWith('/')) {
+                                            relativePath = relativePath.substring(1);
+                                        }
+                                        return <Route key={item.id} path={relativePath} element={<PageComponent />} />;
                                     }
-                                    return <Route key={item.id} path={relativePath} element={<PageComponent />} />;
-                                }
-                                return null;
-                            })}
-                            <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
-                    </Suspense>
+                                    return null;
+                                })}
+                                <Route path="*" element={<NotFoundPage />} />
+                            </Routes>
+                        </Suspense>
+                    </Box>
                 </Box>
             </Box>
 

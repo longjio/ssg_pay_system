@@ -8,33 +8,100 @@ import {
     Box,
     TextField,
     InputAdornment,
+    Collapse, // Collapse 추가
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { MenuItem } from '../types/menu'; // MenuGroup is no longer needed here
+import ExpandLess from '@mui/icons-material/ExpandLess'; // 아이콘 추가
+import ExpandMore from '@mui/icons-material/ExpandMore'; // 아이콘 추가
+import { MenuItem } from '../types/menu';
+import { BodyM, BodyS } from '../components/typography';
 
 interface DrawerContentProps {
     onMenuClick: (item: MenuItem) => void;
-    // [핵심 수정] menuData prop이 이제 MenuItem의 배열을 직접 받습니다.
     menuData: MenuItem[];
 }
+
+// --- 재귀적으로 메뉴 아이템을 렌더링하는 컴포넌트 ---
+const RecursiveListItem = ({ item, onMenuClick, depth }: { item: MenuItem, onMenuClick: (item: MenuItem) => void, depth: number }) => {
+    // 자식 메뉴의 열림/닫힘 상태 관리
+    const [open, setOpen] = useState(true);
+
+    const hasChildren = item.children && item.children.length > 0;
+
+    const handleClick = () => {
+        if (hasChildren) {
+            // 자식이 있으면 토글
+            setOpen(!open);
+        } else if (item.path && item.path !== '#') {
+            // 자식이 없고, 클릭 가능한 경로가 있으면 onMenuClick 호출
+            onMenuClick(item);
+        }
+    };
+
+    // depth에 따라 다른 Typography 컴포넌트 사용
+    const MenuText = depth === 0 ? BodyM : BodyS;
+
+    return (
+        <>
+            <ListItemButton sx={{ pl: 2 + (depth * 2) }} onClick={handleClick}>
+                <ListItemText
+                    primary={<MenuText>{item.text}</MenuText>}
+                    disableTypography
+                />
+                {/* 자식이 있으면 확장/축소 아이콘 표시 */}
+                {hasChildren ? (open ? <ExpandLess /> : <ExpandMore />) : null}
+            </ListItemButton>
+            {/* 자식이 있으면 Collapse 영역에 재귀적으로 렌더링 */}
+            {hasChildren && (
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        {item.children?.map(child => (
+                            <RecursiveListItem key={child.id} item={child} onMenuClick={onMenuClick} depth={depth + 1} />
+                        ))}
+                    </List>
+                </Collapse>
+            )}
+        </>
+    );
+};
+
 
 export default function DrawerContent({ onMenuClick, menuData }: DrawerContentProps) {
     const [searchTerm, setSearchTerm] = useState('');
 
-    // 검색어에 따라 메뉴 데이터를 필터링합니다.
+    // --- 계층 구조를 지원하는 새로운 검색 로직 ---
+    const filterTree = (items: MenuItem[], term: string): MenuItem[] => {
+        const lowercasedTerm = term.toLowerCase().trim();
+        if (!lowercasedTerm) return items;
+
+        return items.reduce<MenuItem[]>((acc, item) => {
+            const hasTextMatch = item.text.toLowerCase().includes(lowercasedTerm);
+
+            if (item.children) {
+                const filteredChildren = filterTree(item.children, term);
+                // 자식 노드에서 검색 결과가 있으면, 부모 노드를 포함하여 반환
+                if (filteredChildren.length > 0) {
+                    acc.push({ ...item, children: filteredChildren });
+                    return acc;
+                }
+            }
+
+            // 부모 노드 자체가 검색어와 일치하면, 자식 없이 부모만 포함
+            if (hasTextMatch) {
+                acc.push({ ...item, children: undefined });
+            }
+            
+            return acc;
+        }, []);
+    };
+
     const filteredMenuItems = useMemo(() => {
-        if (!searchTerm.trim()) {
-            return menuData;
-        }
-        const lowercasedSearchTerm = searchTerm.toLowerCase().trim();
-        return menuData.filter(item =>
-            item.text.toLowerCase().includes(lowercasedSearchTerm)
-        );
+        return filterTree(menuData, searchTerm);
     }, [menuData, searchTerm]);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <Box sx={{ p: 2}}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+            <Box sx={{ p: 2, flexShrink: 0 }}>
                 <TextField
                     fullWidth
                     variant="outlined"
@@ -51,13 +118,11 @@ export default function DrawerContent({ onMenuClick, menuData }: DrawerContentPr
                     }}
                 />
             </Box>
-            <Box sx={{ overflowY: 'auto', overflowX: 'hidden', flexGrow: 1 }}>
+            <Box sx={{ overflowY: 'auto', overflowX: 'hidden', flexGrow: 1, minHeight: 0 }}>
                 <List component="nav">
-                    {/* [핵심 수정] 더 이상 그룹을 렌더링하지 않고, 받은 메뉴 아이템 목록을 바로 렌더링합니다. */}
+                    {/* 재귀 컴포넌트를 사용하여 메뉴 렌더링 */}
                     {filteredMenuItems.map((item) => (
-                        <ListItemButton key={item.id} sx={{ pl: 2 }} onClick={() => onMenuClick(item)}>
-                            <ListItemText primary={item.text} />
-                        </ListItemButton>
+                        <RecursiveListItem key={item.id} item={item} onMenuClick={onMenuClick} depth={0} />
                     ))}
                 </List>
             </Box>

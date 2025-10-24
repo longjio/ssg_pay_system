@@ -128,7 +128,7 @@ export default function UserPage() {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', p: 3, boxSizing: 'border-box' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
             {/* --- 상단 제목 및 조회 영역 --- */}
             <TitleArea title="사용자 관리">
                 <PrintButton onClick={() => alert('인쇄 버튼 클릭')} />
