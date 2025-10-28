@@ -100,6 +100,11 @@ const scrollableTabs: TabItem[] = Array.from({ length: 7 }, (_, i) => ({
 
   return (
     <Stack spacing={4}>
+      <Box>
+        <Typography color="text.secondary" sx={{ mb: 4 }}>
+          Tabs는 관련된 콘텐츠를 탭 형태로 구성하여 쉽게 전환할 수 있게 하는 내비게이션 컴포넌트입니다.
+        </Typography>
+      </Box>
       <ComponentShowcase
         title="Basic Tabs"
         description="A basic example of tabs with 4 items, one of which is disabled."

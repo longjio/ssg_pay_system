@@ -115,13 +115,14 @@ const DialogPage = () => {
     `;
 
     return (
-        <Stack spacing={4}>
-            <Box>
-                <Typography color="text.secondary">
-                    Dialog는 사용자에게 특정 과업에 대한 정보를 제공하고, 결정을 요구하거나,
-                    여러 작업을 포함할 수 있는 대화상자입니다.
-                </Typography>
-            </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+            <Stack spacing={4}>
+                <Box>
+                    <Typography color="text.secondary">
+                        Dialog는 사용자에게 특정 과업에 대한 정보를 제공하고, 결정을 요구하거나,
+                        여러 작업을 포함할 수 있는 대화상자입니다.
+                    </Typography>
+                </Box>
 
             <ComponentShowcase
                 title="기본 Alert Dialog"
@@ -239,7 +240,8 @@ const DialogPage = () => {
                 }
                 code={formDialogCode}
             />
-        </Stack>
+            </Stack>
+        </Box>
     );
 };
 

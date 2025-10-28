@@ -1,14 +1,15 @@
 // src/pages/MenuPage.tsx
 import React, { useState } from 'react';
 import {
-  Stack,
   Box,
+  Stack,
   Button,
   Avatar,
   IconButton,
   Tooltip,
   ListItemIcon,
   Divider,
+  Typography,
 } from '@mui/material';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
@@ -160,8 +161,14 @@ return (
   };
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Menu는 임시로 나타나는 옵션 목록을 제공하는 내비게이션 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Basic Menu"
         description="A basic menu anchored to a button."
         component={<BasicMenuExample />}
@@ -173,7 +180,8 @@ return (
         component={<AccountMenuExample />}
         code={accountMenuCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

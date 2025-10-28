@@ -75,15 +75,13 @@ const ProgressPage = () => {
     `;
 
     return (
-        <Stack spacing={4} sx={{ p: 3 }}>
-            <Box>
-                <Typography variant="h1" gutterBottom>
-                    Progress
-                </Typography>
-                <Typography color="text.secondary" sx={{ mb: 4 }}>
-                    Progress indicator(진행 표시기)는 지정되지 않은 대기 시간을 알리거나 작업의 진행률을 표시합니다.
-                </Typography>
-            </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+            <Stack spacing={4}>
+                <Box>
+                    <Typography color="text.secondary" sx={{ mb: 4 }}>
+                        Progress indicator(진행 표시기)는 지정되지 않은 대기 시간을 알리거나 작업의 진행률을 표시합니다.
+                    </Typography>
+                </Box>
 
             <ComponentShowcase
                 title="Circular Progress"
@@ -157,7 +155,8 @@ const ProgressPage = () => {
                 }
                 code={customSizeCode}
             />
-        </Stack>
+            </Stack>
+        </Box>
     );
 };
 

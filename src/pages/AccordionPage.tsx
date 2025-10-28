@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import DsAccordion from '../components/surface/DsAccordion';
 
@@ -37,8 +36,14 @@ const AccordionPage = () => {
   `;
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Accordion은 확장 가능한 패널로 콘텐츠를 접거나 펼칠 수 있는 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Simple Accordions"
         description="This is a simple usage of the accordion component."
         component={
@@ -83,7 +88,8 @@ const AccordionPage = () => {
         }
         code={disabledCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

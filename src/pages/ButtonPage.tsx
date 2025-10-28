@@ -1,6 +1,6 @@
 // src/pages/ButtonPage.tsx
 import React from 'react';
-import { Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import { DsButton } from '../components/button/DsButton';
 
@@ -33,8 +33,14 @@ const ButtonPage = () => {
   `;
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Button은 사용자가 클릭하여 작업을 수행하거나 선택을 할 수 있게 하는 기본적인 인터랙션 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Contained Buttons"
         description="Contained buttons are high-emphasis, distinguished by their use of elevation and fill. They contain primary actions."
         component={
@@ -85,7 +91,8 @@ const ButtonPage = () => {
         }
         code={sizeCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

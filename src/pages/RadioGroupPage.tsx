@@ -1,6 +1,6 @@
 // src/pages/RadioGroupPage.tsx
 import React, { useState } from 'react';
-import { Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import { DsRadioGroup } from '../components/input/DsRadioGroup';
 
@@ -77,9 +77,15 @@ const [selectedValue, setSelectedValue] = useState('first');
   };
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
-        title="Radio Group (Vertical)"
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Radio Group은 여러 옵션 중 하나만 선택할 수 있게 하는 입력 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
+          title="Radio Group (Vertical)"
         description="The default layout for the radio group is vertical."
         component={<InteractiveRadioGroup name="vertical-group" />}
         code={verticalCode}
@@ -105,7 +111,8 @@ const [selectedValue, setSelectedValue] = useState('first');
         }
         code={disabledCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

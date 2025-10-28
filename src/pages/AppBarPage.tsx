@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
     Box,
@@ -144,8 +143,14 @@ const AppBarPage = () => {
     `;
 
     return (
-        <Stack spacing={4}>
-            <ComponentShowcase
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+            <Stack spacing={4}>
+                <Box>
+                    <Typography color="text.secondary" sx={{ mb: 4 }}>
+                        App Bar는 현재 화면에 대한 정보와 주요 액션을 제공하는 상단 바 컴포넌트입니다.
+                    </Typography>
+                </Box>
+                <ComponentShowcase
                 title="Basic AppBar"
                 description="A standard AppBar with a title, menu icon, and action button."
                 component={
@@ -244,7 +249,8 @@ const AppBarPage = () => {
                 }
                 code={profileMenuAppBarCode}
             />
-        </Stack>
+            </Stack>
+        </Box>
     );
 };
 

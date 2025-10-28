@@ -1,6 +1,6 @@
 // src/pages/ButtonGroupPage.tsx
 import React from 'react';
-import { Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import { DsButtonGroup } from '../components/button/DsButtonGroup';
 import { DsButton } from '../components/button/DsButton';
@@ -60,8 +60,14 @@ const ButtonGroupPage = () => {
   `;
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Button Group은 관련된 여러 버튼을 그룹화하여 일관된 UI를 제공하는 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Basic Button Group"
         description="The default button group is 'contained' and 'primary' color."
         component={
@@ -127,7 +133,8 @@ const ButtonGroupPage = () => {
         }
         code={verticalCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

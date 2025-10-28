@@ -144,8 +144,14 @@ const CardPage = () => {
     `;
 
     return (
-        <Stack spacing={4}>
-            <ComponentShowcase
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+            <Stack spacing={4}>
+                <Box>
+                    <Typography color="text.secondary" sx={{ mb: 4 }}>
+                        Card는 관련된 정보를 카드 형태로 그룹화하여 표시하는 컨테이너 컴포넌트입니다.
+                    </Typography>
+                </Box>
+                <ComponentShowcase
                 title="Outlined Card"
                 description="Set variant='outlined' to render an outlined card."
                 component={
@@ -254,7 +260,8 @@ const CardPage = () => {
                 }
                 code={basicCardCode}
             />
-        </Stack>
+            </Stack>
+        </Box>
     );
 };
 

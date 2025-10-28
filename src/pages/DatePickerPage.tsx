@@ -58,12 +58,13 @@ export default function DsDatePickerPage() {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack spacing={4} sx={{ p: 3 }}>
-                <Box>
-                    <Typography color="text.secondary" sx={{ mb: 4 }}>
-                        Date Picker는 달력 UI를 통해 날짜를 시각적으로 선택하는 데 중점을 둔 컴포넌트입니다.
-                    </Typography>
-                </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+                <Stack spacing={4}>
+                    <Box>
+                        <Typography color="text.secondary" sx={{ mb: 4 }}>
+                            Date Picker는 달력 UI를 통해 날짜를 시각적으로 선택하는 데 중점을 둔 컴포넌트입니다.
+                        </Typography>
+                    </Box>
 
                 <ComponentShowcase
                     title="Controlled"
@@ -131,7 +132,8 @@ export default function DsDatePickerPage() {
                     }
                     code={dateRangeCode}
                 />
-            </Stack>
+                </Stack>
+            </Box>
         </LocalizationProvider>
     );
 }

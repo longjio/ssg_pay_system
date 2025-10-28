@@ -85,40 +85,47 @@ const stepContents: React.ReactNode[] = [
   `;
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
-        title="Horizontal Stepper"
-        description="The default stepper displays progress horizontally."
-        component={
-          <DsStepper steps={steps} stepContents={stepContents} />
-        }
-        code={horizontalCode}
-      />
-      <ComponentShowcase
-        title="Vertical Stepper"
-        description="Steppers can be displayed vertically by setting the orientation prop."
-        component={
-          <DsStepper
-            steps={steps}
-            stepContents={stepContents}
-            orientation="vertical"
-          />
-        }
-        code={verticalCode}
-      />
-      <ComponentShowcase
-        title="Alternative Label Stepper"
-        description="The alternativeLabel prop positions the label below the step icon."
-        component={
-          <DsStepper
-            steps={steps}
-            stepContents={stepContents}
-            alternativeLabel
-          />
-        }
-        code={alternativeLabelCode}
-      />
-    </Stack>
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Stepper는 여러 단계로 이루어진 프로세스의 진행 상황을 표시하는 내비게이션 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
+          title="Horizontal Stepper"
+          description="The default stepper displays progress horizontally."
+          component={
+            <DsStepper steps={steps} stepContents={stepContents} />
+          }
+          code={horizontalCode}
+        />
+        <ComponentShowcase
+          title="Vertical Stepper"
+          description="Steppers can be displayed vertically by setting the orientation prop."
+          component={
+            <DsStepper
+              steps={steps}
+              stepContents={stepContents}
+              orientation="vertical"
+            />
+          }
+          code={verticalCode}
+        />
+        <ComponentShowcase
+          title="Alternative Label Stepper"
+          description="The alternativeLabel prop positions the label below the step icon."
+          component={
+            <DsStepper
+              steps={steps}
+              stepContents={stepContents}
+              alternativeLabel
+            />
+          }
+          code={alternativeLabelCode}
+        />
+      </Stack>
+    </Box>
   );
 };
 

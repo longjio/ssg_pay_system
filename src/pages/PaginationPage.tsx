@@ -1,6 +1,6 @@
 // src/pages/PaginationPage.tsx
 import React, { useState } from 'react';
-import { Stack, TablePagination } from '@mui/material';
+import { Box, Stack, TablePagination, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import DsPagination from '../components/navigation/DsPagination';
 
@@ -99,8 +99,14 @@ const handleChangeRowsPerPage = (
   };
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Pagination은 많은 양의 콘텐츠를 여러 페이지로 나누어 탐색할 수 있게 하는 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Basic Pagination"
         description="A simple, controlled pagination component."
         component={<InteractivePagination />}
@@ -151,7 +157,8 @@ const handleChangeRowsPerPage = (
         component={<InteractiveTablePagination />}
         code={tablePaginationCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

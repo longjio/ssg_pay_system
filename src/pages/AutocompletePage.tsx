@@ -1,6 +1,6 @@
 // src/pages/AutocompletePage.tsx
 import React from 'react';
-import { Stack, TextField } from '@mui/material';
+import { Box, Stack, TextField, Typography } from '@mui/material';
 import { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import { DsAutoComplete } from '../components/input/DsAutoComplete';
@@ -79,8 +79,14 @@ export default function AutocompletePage() {
   `;
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Autocomplete는 입력 시 자동완성 제안을 제공하는 향상된 텍스트 입력 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Basic Autocomplete"
         description="The user can type to search for an option from a predefined list."
         component={
@@ -170,6 +176,7 @@ export default function AutocompletePage() {
         }
         code={sizesCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 }

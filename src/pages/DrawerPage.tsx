@@ -1,6 +1,6 @@
 // src/pages/DrawerPage.tsx
 import React, { useState } from 'react';
-import { Stack, Box, Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from '@mui/material';
+import { Box, Stack, Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Typography } from '@mui/material';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ComponentShowcase from '../components/common/ComponentShowcase';
@@ -122,14 +122,21 @@ const toggleDrawer =
   };
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Drawer는 화면 가장자리에서 슬라이드되어 나타나는 패널 형태의 내비게이션 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Temporary Drawer"
         description="The Drawer is a surface that can be opened and closed from any side of the screen. It is controlled by the 'open' prop and the 'onClose' callback."
         component={<InteractiveDrawerExample />}
         code={code}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

@@ -2,8 +2,8 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import {
-  Stack,
   Box,
+  Stack,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -11,6 +11,7 @@ import {
   RadioGroup,
   Switch,
   SpeedDialProps,
+  Typography,
 } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import SaveIcon from '@mui/icons-material/Save';
@@ -135,28 +136,35 @@ function PlaygroundSpeedDial() {
   };
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
-        title="Basic Speed Dial"
-        description="The Speed Dial is a floating action button that can display related actions. It must be placed inside a container with 'position: relative'."
-        component={
-          <Box sx={{ width: '100%', height: 320, position: 'relative', border: '1px dashed grey' }}>
-            <DsSpeedDial
-              ariaLabel="SpeedDial basic example"
-              sx={{ position: 'absolute', bottom: 16, right: 16 }}
-              actions={actions}
-            />
-          </Box>
-        }
-        code={basicCode}
-      />
-      <ComponentShowcase
-        title="Playground"
-        description="An interactive example to control the direction and visibility of the Speed Dial."
-        component={<PlaygroundSpeedDial />}
-        code={playgroundCode}
-      />
-    </Stack>
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Speed Dial은 플로팅 액션 버튼을 확장하여 관련 액션들을 빠르게 접근할 수 있게 하는 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
+          title="Basic Speed Dial"
+          description="The Speed Dial is a floating action button that can display related actions. It must be placed inside a container with 'position: relative'."
+          component={
+            <Box sx={{ width: '100%', height: 320, position: 'relative', border: '1px dashed grey' }}>
+              <DsSpeedDial
+                ariaLabel="SpeedDial basic example"
+                sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                actions={actions}
+              />
+            </Box>
+          }
+          code={basicCode}
+        />
+        <ComponentShowcase
+          title="Playground"
+          description="An interactive example to control the direction and visibility of the Speed Dial."
+          component={<PlaygroundSpeedDial />}
+          code={playgroundCode}
+        />
+      </Stack>
+    </Box>
   );
 };
 

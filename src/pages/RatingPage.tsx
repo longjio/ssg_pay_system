@@ -1,6 +1,6 @@
 // src/pages/RatingPage.tsx
 import React, { useState } from 'react';
-import { Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import DsRating from '../components/input/DsRating';
 
@@ -49,8 +49,14 @@ const [value, setValue] = useState<number | null>(2);
   };
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Rating은 별점이나 평점을 표시하고 입력받을 수 있는 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Basic Rating"
         description="A controlled rating component."
         component={<InteractiveRating />}
@@ -84,7 +90,8 @@ const [value, setValue] = useState<number | null>(2);
         }
         code={sizesCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

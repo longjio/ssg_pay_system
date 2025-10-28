@@ -1,6 +1,6 @@
 // src/pages/SelectPage.tsx
 import React, { useState } from 'react';
-import { Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import { DsSelect, DsSelectItem } from '../components/input/DsSelect';
@@ -105,8 +105,14 @@ const [age, setAge] = useState<string | number>(10);
   };
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Select는 드롭다운 목록에서 하나의 값을 선택할 수 있는 입력 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Basic Select"
         description="A controlled select component."
         component={<InteractiveSelect />}
@@ -188,7 +194,8 @@ const [age, setAge] = useState<string | number>(10);
         }
         code={sizesCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

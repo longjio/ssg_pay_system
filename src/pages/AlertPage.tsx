@@ -1,6 +1,6 @@
 // src/pages/AlertPage.tsx
 import React from 'react';
-import { Stack, Button } from '@mui/material';
+import { Box, Stack, Button, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import DsAlert from '../components/feedback/DsAlert';
 
@@ -38,8 +38,14 @@ const AlertPage = () => {
   `;
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Alert는 사용자에게 중요한 정보를 시각적으로 강조하여 전달하는 피드백 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Standard Alerts"
         description="The standard alert appears with a background color and icon corresponding to the severity."
         component={
@@ -95,7 +101,8 @@ const AlertPage = () => {
         }
         code={actionCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

@@ -1,6 +1,6 @@
 // src/pages/ToggleButtonPage.tsx
 import React, { useState } from 'react';
-import { Stack, Typography, Paper, Divider } from '@mui/material'; // Removed unused Box import
+import { Box, Stack, Typography, Paper, Divider } from '@mui/material';
 import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
@@ -90,89 +90,91 @@ const ToggleButtonPage = () => {
 
 
     return (
-        <Stack spacing={4} sx={{ p: 3 }}>
-            <Typography variant="h4" component="h1" gutterBottom>
-                DsToggleButton 예제
-            </Typography>
-
-            <Paper elevation={3} sx={{ p: 3 }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    단일 선택 (Exclusive)
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+            <Stack spacing={4}>
+                <Typography variant="h4" component="h1" gutterBottom>
+                    DsToggleButton 예제
                 </Typography>
-                <DsToggleButton
-                    options={alignmentOptions}
-                    value={alignment}
-                    onChange={handleAlignment}
-                    exclusive
-                    aria-label="text alignment"
-                />
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                    선택된 정렬: {alignment || '없음'}
-                </Typography>
-            </Paper>
 
-            <Divider />
+                <Paper elevation={3} sx={{ p: 3 }}>
+                    <Typography variant="h6" component="h2" gutterBottom>
+                        단일 선택 (Exclusive)
+                    </Typography>
+                    <DsToggleButton
+                        options={alignmentOptions}
+                        value={alignment}
+                        onChange={handleAlignment}
+                        exclusive
+                        aria-label="text alignment"
+                    />
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                        선택된 정렬: {alignment || '없음'}
+                    </Typography>
+                </Paper>
 
-            <Paper elevation={3} sx={{ p: 3 }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    다중 선택
-                </Typography>
-                <DsToggleButton
-                    options={formatOptions}
-                    value={formats}
-                    onChange={handleFormat}
-                    aria-label="text formatting"
-                    color="primary" // 색상 예시
-                />
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                    선택된 포맷: {formats.join(', ') || '없음'}
-                </Typography>
-            </Paper>
+                <Divider />
 
-            <Divider />
+                <Paper elevation={3} sx={{ p: 3 }}>
+                    <Typography variant="h6" component="h2" gutterBottom>
+                        다중 선택
+                    </Typography>
+                    <DsToggleButton
+                        options={formatOptions}
+                        value={formats}
+                        onChange={handleFormat}
+                        aria-label="text formatting"
+                        color="primary" // 색상 예시
+                    />
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                        선택된 포맷: {formats.join(', ') || '없음'}
+                    </Typography>
+                </Paper>
 
-            <Paper elevation={3} sx={{ p: 3 }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    아이콘과 텍스트 함께 사용 (단일 선택)
-                </Typography>
-                <DsToggleButton
-                    options={viewOptions}
-                    value={view}
-                    onChange={handleView}
-                    exclusive
-                    size="small" // 사이즈 예시
-                />
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                    선택된 뷰: {view || '없음'}
-                </Typography>
-            </Paper>
+                <Divider />
 
-            <Divider />
+                <Paper elevation={3} sx={{ p: 3 }}>
+                    <Typography variant="h6" component="h2" gutterBottom>
+                        아이콘과 텍스트 함께 사용 (단일 선택)
+                    </Typography>
+                    <DsToggleButton
+                        options={viewOptions}
+                        value={view}
+                        onChange={handleView}
+                        exclusive
+                        size="small" // 사이즈 예시
+                    />
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                        선택된 뷰: {view || '없음'}
+                    </Typography>
+                </Paper>
 
-            <Paper elevation={3} sx={{ p: 3 }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                    버튼 스타일 커스텀 (buttonSx)
-                </Typography>
-                <DsToggleButton
-                    options={alignmentOptions} // Re-using alignmentOptions and handleAlignment
-                    value={alignment}
-                    onChange={handleAlignment} // handleAlignment is now correctly typed
-                    exclusive
-                    buttonSx={{
-                        '&.Mui-selected': {
-                            backgroundColor: 'secondary.main',
-                            color: 'secondary.contrastText',
-                            '&:hover': {
-                                backgroundColor: 'secondary.dark',
-                            }
-                        },
-                        borderTopRightRadius: 20, // 예시 스타일
-                        borderBottomLeftRadius: 20,
-                    }}
-                />
-            </Paper>
+                <Divider />
 
-        </Stack>
+                <Paper elevation={3} sx={{ p: 3 }}>
+                    <Typography variant="h6" component="h2" gutterBottom>
+                        버튼 스타일 커스텀 (buttonSx)
+                    </Typography>
+                    <DsToggleButton
+                        options={alignmentOptions} // Re-using alignmentOptions and handleAlignment
+                        value={alignment}
+                        onChange={handleAlignment} // handleAlignment is now correctly typed
+                        exclusive
+                        buttonSx={{
+                            '&.Mui-selected': {
+                                backgroundColor: 'secondary.main',
+                                color: 'secondary.contrastText',
+                                '&:hover': {
+                                    backgroundColor: 'secondary.dark',
+                                }
+                            },
+                            borderTopRightRadius: 20, // 예시 스타일
+                            borderBottomLeftRadius: 20,
+                        }}
+                    />
+                </Paper>
+
+            </Stack>
+        </Box>
     );
 };
 

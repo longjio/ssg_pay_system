@@ -77,9 +77,26 @@ export default function MainLayout() {
         setDesktopDrawerOpen(true); // Drawer 열기
 
         const group = menuStructure.find(g => g.id === item.id);
-        
-        if (group && group.items.length > 0 && group.items[0].path) {
-            navigate(group.items[0].path);
+
+        // 재귀적으로 첫 번째 라우트 가능한 아이템을 찾는 함수
+        const findFirstRoutableItem = (items: MenuItem[]): MenuItem | null => {
+            for (const menuItem of items) {
+                if (menuItem.path) {
+                    return menuItem;
+                }
+                if (menuItem.children && menuItem.children.length > 0) {
+                    const found = findFirstRoutableItem(menuItem.children);
+                    if (found) return found;
+                }
+            }
+            return null;
+        };
+
+        if (group && group.items.length > 0) {
+            const firstItem = findFirstRoutableItem(group.items);
+            if (firstItem?.path) {
+                navigate(firstItem.path);
+            }
         }
     };
     const handleTabChange = (event: React.SyntheticEvent, newPath: string) => { navigate(newPath); };

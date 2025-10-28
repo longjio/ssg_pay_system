@@ -17,7 +17,7 @@ export default function DatePage() {
     const [value, setValue] = useState<Dayjs | null>(null);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+        <Box sx={{ p: 3 }}>
             <Typography variant="h1" gutterBottom>
                 Date Pickers & Fields
             </Typography>

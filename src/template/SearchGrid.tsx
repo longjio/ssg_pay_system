@@ -4,8 +4,8 @@ import React, { useState, useMemo } from 'react';
 import { Box, IconButton, Checkbox, Stack } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import type { Dayjs } from 'dayjs';
+import { DsDatePicker } from '../components/input/DsDatePicker';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
@@ -219,18 +219,21 @@ export default function SearchGridPage() {
                 <Box sx={{ flexGrow: 1 }}>
                     <Stack spacing={2}>
                         {/* Row 1 */}
-                        <Stack direction="row" spacing={3.75}>
+                        <Stack direction="row" sx={{ flexWrap: 'wrap', columnGap: '16px', rowGap: '8px' }}>
                             <SearchFormField label="지불회계단위" codeValue={accountingUnitCode} onCodeChange={(e) => setAccountingUnitCode(e.target.value)} codePlaceholder="코드" nameValue={accountingUnitName} namePlaceholder="회계단위명" onSearchClick={handleSearchAccountingUnit} />
                             <SearchFormField label="발생회계단위" codeValue={accrualUnitCode} onCodeChange={(e) => setAccrualUnitCode(e.target.value)} codePlaceholder="코드" nameValue={accrualUnitName} namePlaceholder="회계단위명" onSearchClick={handleSearchAccrualUnit} />
                             <FormField label="지불이관일자" htmlFor="transfer-date-picker">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker value={transferDate} onChange={(newValue) => setTransferDate(newValue)} sx={{ width: '170px' }} slotProps={{ textField: { id: 'transfer-date-picker', size: 'small' } }} />
+                                    <DsDatePicker
+                                        value={transferDate}
+                                        onChange={(newValue) => setTransferDate(newValue)}
+                                    />
                                 </LocalizationProvider>
                             </FormField>
                             <SearchFormField label="거래구분" codeValue={transactionType} onCodeChange={(e) => setTransactionType(e.target.value)} codePlaceholder="코드" nameValue={transactionTypeName} namePlaceholder="거래구분명" onSearchClick={handleSearchTransactionType} />
                         </Stack>
                         {/* Row 2 */}
-                        <Stack direction="row" spacing={3.75}>
+                        <Stack direction="row" sx={{ flexWrap: 'wrap', columnGap: '16px', rowGap: '8px' }}>
                             <SearchFormField label="지불유형" codeValue={menuId} onCodeChange={(e) => setMenuId(e.target.value)} codePlaceholder="유형코드" nameValue={menuName} namePlaceholder="유형명" onSearchClick={handleSearchMenu} />
                             <SearchFormField label="주기코드" codeValue={cycleCode} onCodeChange={(e) => setCycleCode(e.target.value)} codePlaceholder="코드" nameValue={cycleName} namePlaceholder="주기명" onSearchClick={handleSearchCycle} />
                             <SearchFormField label="주기회차" codeValue={cycleCount} onCodeChange={(e) => setCycleCount(e.target.value)} codePlaceholder="회차" nameValue="" onSearchClick={handleSearchCycleCount} hideNameField={true} codeTextFieldProps={{ sx: { width: '132px' } }} />

@@ -1,6 +1,6 @@
 // src/pages/BreadcrumbsPage.tsx
 import React from 'react';
-import { Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import GrainIcon from '@mui/icons-material/Grain';
@@ -73,8 +73,14 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
   `;
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Breadcrumbs는 현재 페이지의 위치를 계층적으로 표시하는 내비게이션 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Basic Breadcrumbs"
         description="A simple breadcrumb trail."
         component={<DsBreadcrumbs items={basicItems} />}
@@ -98,7 +104,8 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
         component={<DsBreadcrumbs items={basicItems} separator={<NavigateNextIcon fontSize="small" />} />}
         code={customSeparatorCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

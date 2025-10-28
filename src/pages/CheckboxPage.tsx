@@ -1,6 +1,6 @@
 // src/pages/CheckboxPage.tsx
 import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import DsCheckbox from '../components/input/DsCheckbox';
 
@@ -106,8 +106,14 @@ return (
 
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Checkbox는 여러 옵션 중 하나 이상을 선택할 수 있게 하는 입력 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Basic Checkboxes"
         description="Checkboxes can be checked, unchecked, or disabled."
         component={
@@ -150,7 +156,8 @@ return (
         component={<IndeterminateExample />}
         code={indeterminateCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

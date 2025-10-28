@@ -1,6 +1,6 @@
 // src/pages/SliderPage.tsx
 import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Typography } from '@mui/material';
 import ComponentShowcase from '../components/common/ComponentShowcase';
 import { DsSlider } from '../components/input/DsSlider';
 
@@ -70,8 +70,14 @@ const [value, setValue] = useState<number[]>([20, 37]);
   };
 
   return (
-    <Stack spacing={4}>
-      <ComponentShowcase
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+      <Stack spacing={4}>
+        <Box>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
+            Slider는 범위 내에서 값을 선택하거나 조정할 수 있는 입력 컴포넌트입니다.
+          </Typography>
+        </Box>
+        <ComponentShowcase
         title="Continuous Slider"
         description="A slider for selecting a value from a continuous range."
         component={
@@ -120,7 +126,8 @@ const [value, setValue] = useState<number[]>([20, 37]);
         }
         code={disabledCode}
       />
-    </Stack>
+      </Stack>
+    </Box>
   );
 };
 

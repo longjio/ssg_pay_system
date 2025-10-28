@@ -53,7 +53,7 @@ export const appRoutes: AppRouteConfig[] = [
         children: [
             {
                 id: 'input-group',
-                path: '/components/input', // Dummy path
+                path: '#', // DummyComponent는 라우팅되지 않음
                 component: DummyComponent,
                 menu: { text: 'Input', group: 'components' },
                 children: [
@@ -71,7 +71,7 @@ export const appRoutes: AppRouteConfig[] = [
             },
             {
                 id: 'navigation-group',
-                path: '/components/navigation',
+                path: '#', // DummyComponent는 라우팅되지 않음
                 component: DummyComponent,
                 menu: { text: 'Navigation', group: 'components' },
                 children: [
@@ -87,7 +87,7 @@ export const appRoutes: AppRouteConfig[] = [
             },
             {
                 id: 'surface-group',
-                path: '/components/surface',
+                path: '#', // DummyComponent는 라우팅되지 않음
                 component: DummyComponent,
                 menu: { text: 'Surface', group: 'components' },
                 children: [
@@ -98,7 +98,7 @@ export const appRoutes: AppRouteConfig[] = [
             },
             {
                 id: 'feedback-group',
-                path: '/components/feedback',
+                path: '#', // DummyComponent는 라우팅되지 않음
                 component: DummyComponent,
                 menu: { text: 'Feedback', group: 'components' },
                 children: [
@@ -109,7 +109,7 @@ export const appRoutes: AppRouteConfig[] = [
             },
             {
                 id: 'mui-x-group',
-                path: '/components/mui-x',
+                path: '#', // DummyComponent는 라우팅되지 않음
                 component: DummyComponent,
                 menu: { text: 'MUI X', group: 'components' },
                 children: [

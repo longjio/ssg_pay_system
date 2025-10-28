@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import type { Dayjs } from 'dayjs';
+import { DsDatePicker } from '../components/input/DsDatePicker';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
@@ -220,21 +220,9 @@ export default function TabsGridPage() {
                             <SearchFormField label="발생회계단위" codeValue={accrualUnitCode} onCodeChange={(e) => setAccrualUnitCode(e.target.value)} codePlaceholder="코드" nameValue={accrualUnitName} namePlaceholder="회계단위명" onSearchClick={handleSearchAccrualUnit} />
                             <FormField label="지불이관일자" htmlFor="transfer-date-picker">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
+                                    <DsDatePicker
                                         value={transferDate}
                                         onChange={(newValue) => setTransferDate(newValue)}
-                                        sx={{ width: '170px' }}
-                                        slotProps={{
-                                            textField: {
-                                                id: 'transfer-date-picker',
-                                                size: 'small',
-                                                sx: {
-                                                    '& .MuiInputBase-root': {
-                                                        height: '34px'
-                                                    }
-                                                }
-                                            }
-                                        }}
                                     />
                                 </LocalizationProvider>
                             </FormField>
