@@ -103,7 +103,6 @@ const DataGridPage = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
             <Stack spacing={4}>
                 <Box>
-                    <Typography variant="h1" component="h1" gutterBottom>DataGrid</Typography>
                     <Typography color="text.secondary">
                         DataGrid는 대량의 데이터를 테이블 형태로 표시하고 정렬, 페이징, 필터링 등 다양한 인터랙션을 제공하는 컴포넌트입니다.
                     </Typography>

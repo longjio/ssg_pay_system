@@ -1,12 +1,16 @@
+
 import React from 'react';
 import { getTheme } from '../theme';
 import { Palette, PaletteColor } from '@mui/material/styles';
-import { Box, Paper, Typography, Stack, Divider } from '@mui/material';
+import { Box, Paper, Typography, Stack, Divider, Grid as MuiGrid } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { TitleL } from '../components/typography';
 
-// 단일 색상을 표시하는 컴포넌트 (변경 없음)
+const Grid: any = MuiGrid;
+
+// Displays a single color with its name and hex value.
 const ColorBox = ({ color, name }: { color?: string; name: string }) => (
-    <Box sx={{ textAlign: 'center' }}>
+    <Box sx={{ textAlign: 'center', minWidth: 110 }}>
         <Paper
             variant="outlined"
             sx={{
@@ -18,9 +22,10 @@ const ColorBox = ({ color, name }: { color?: string; name: string }) => (
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                mx: 'auto'
             }}
         />
-        <Typography variant="caption" display="block" mt={1} sx={{ wordBreak: 'break-all' }}>
+        <Typography variant="caption" display="block" mt={1} sx={{ wordBreak: 'break-all', fontWeight: 'medium' }}>
             {name}
         </Typography>
         <Typography variant="caption" sx={{ color: 'text.secondary', wordBreak: 'break-all' }}>
@@ -29,78 +34,110 @@ const ColorBox = ({ color, name }: { color?: string; name: string }) => (
     </Box>
 );
 
-// light/main/dark 구조를 가진 색상 그룹을 표시하는 컴포넌트 (변경 없음)
-const PaletteSection = ({ title, paletteColor }: { title: string; paletteColor?: PaletteColor }) => {
+// Displays a color from the palette with a demonstration of its contrastText.
+const ContrastColorBox = ({ color, contrastText, name }: { color?: string; contrastText?: string; name: string }) => (
+    <Box sx={{ textAlign: 'center', minWidth: 110 }}>
+        <Paper
+            variant="outlined"
+            sx={{
+                bgcolor: color,
+                color: contrastText,
+                width: 80,
+                height: 80,
+                borderRadius: 1,
+                border: '1px solid rgba(0,0,0,0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mx: 'auto',
+                fontSize: '0.8rem',
+                fontWeight: 'medium'
+            }}
+        >
+            Text
+        </Paper>
+        <Typography variant="caption" display="block" mt={1} sx={{ wordBreak: 'break-all', fontWeight: 'medium' }}>
+            {name}
+        </Typography>
+        <Typography variant="caption" sx={{ color: 'text.secondary', wordBreak: 'break-all' }}>
+            {color}
+        </Typography>
+    </Box>
+);
+
+// Section for palette colors like primary, secondary, etc.
+const PaletteSection = ({ title, paletteColor }: { title: string; paletteColor?: Partial<PaletteColor> }) => {
     if (!paletteColor) return null;
     return (
         <Box>
             <Typography variant="h6" gutterBottom>{title}</Typography>
             <Stack direction="row" spacing={2} useFlexGap flexWrap="wrap">
-                {'light' in paletteColor && <ColorBox color={paletteColor.light} name="light" />}
-                {'main' in paletteColor && <ColorBox color={paletteColor.main} name="main" />}
-                {'dark' in paletteColor && <ColorBox color={paletteColor.dark} name="dark" />}
+                {paletteColor.light && <ContrastColorBox color={paletteColor.light} contrastText={paletteColor.contrastText} name="light" />}
+                {paletteColor.main && <ContrastColorBox color={paletteColor.main} contrastText={paletteColor.contrastText} name="main" />}
+                {paletteColor.dark && <ContrastColorBox color={paletteColor.dark} contrastText={paletteColor.contrastText} name="dark" />}
             </Stack>
         </Box>
     );
 };
 
-// [핵심 수정] colors prop의 타입을 더 명확하고 안전하게 변경합니다.
-const SimpleColorSection = ({ title, colors }: { title: string; colors: Palette['text'] | Palette['background'] }) => (
+// Section for simple key-value color objects (like 'text', 'background', 'action').
+const KeyValueColorSection = ({ title, colors }: { title: string; colors: { [key: string]: any } }) => (
     <Box>
         <Typography variant="h6" gutterBottom>{title}</Typography>
-        <Stack direction="row" spacing={2} useFlexGap flexWrap="wrap">
+        <Grid container spacing={2}>
             {Object.entries(colors).map(([name, color]) => (
-                <ColorBox key={name} color={color} name={name} />
+                typeof color === 'string' && (
+                    <Grid xs={6} sm={4} md={3} lg={2} key={name}>
+                        <ColorBox color={color} name={name} />
+                    </Grid>
+                )
             ))}
-        </Stack>
+        </Grid>
     </Box>
 );
 
-
-// 메인 페이지 컴포넌트
-const ColorPalettePage = () => {
-    const lightTheme = getTheme('light');
-    const darkTheme = getTheme('dark');
-
-    const lightPalette = lightTheme.palette;
-    const darkPalette = darkTheme.palette;
+// Component to render a theme's color palette.
+const ThemePalette = ({ mode }: { mode: 'light' | 'dark' }) => {
+    const theme = getTheme(mode);
+    const palette = theme.palette;
 
     return (
-        <Stack spacing={5}>
-            <TitleL>Color Palette</TitleL>
+        <Box>
+            <Typography variant="h4" gutterBottom sx={{ textTransform: 'capitalize' }}>
+                {mode} Mode
+            </Typography>
+            <Divider sx={{ mb: 3 }} />
+            <Stack spacing={4}>
+                <PaletteSection title="Primary" paletteColor={palette.primary} />
+                <PaletteSection title="Secondary" paletteColor={palette.secondary} />
+                <PaletteSection title="Success" paletteColor={palette.success} />
+                <PaletteSection title="Error" paletteColor={palette.error} />
+                <PaletteSection title="Warning" paletteColor={palette.warning} />
+                <PaletteSection title="Info" paletteColor={palette.info} />
+                <KeyValueColorSection title="Text" colors={palette.text} />
+                <KeyValueColorSection title="Background" colors={{ paper: palette.background.paper, default: palette.background.default }} />
+                <KeyValueColorSection title="Action" colors={palette.action} />
+                <KeyValueColorSection title="Common" colors={palette.common} />
+                <KeyValueColorSection title="Grey" colors={grey} />
+            </Stack>
+        </Box>
+    );
+}
 
-            {/* 라이트 모드 팔레트 섹션 */}
-            <Box>
-                <Typography variant="h4" gutterBottom>Light Mode</Typography>
-                <Divider sx={{ mb: 3 }} />
-                <Stack spacing={4}>
-                    <PaletteSection title="Primary" paletteColor={lightPalette.primary} />
-                    <PaletteSection title="Secondary" paletteColor={lightPalette.secondary} />
-                    <PaletteSection title="Success" paletteColor={lightPalette.success} />
-                    <PaletteSection title="Error" paletteColor={lightPalette.error} />
-                    <PaletteSection title="Warning" paletteColor={lightPalette.warning} />
-                    <PaletteSection title="Info" paletteColor={lightPalette.info} />
-                    <SimpleColorSection title="Text" colors={lightPalette.text} />
-                    <SimpleColorSection title="Background" colors={lightPalette.background} />
-                </Stack>
-            </Box>
-
-            {/* 다크 모드 팔레트 섹션 */}
-            <Box>
-                <Typography variant="h4" gutterBottom>Dark Mode</Typography>
-                <Divider sx={{ mb: 3 }} />
-                <Stack spacing={4}>
-                    <PaletteSection title="Primary" paletteColor={darkPalette.primary} />
-                    <PaletteSection title="Secondary" paletteColor={darkPalette.secondary} />
-                    <PaletteSection title="Success" paletteColor={darkPalette.success} />
-                    <PaletteSection title="Error" paletteColor={darkPalette.error} />
-                    <PaletteSection title="Warning" paletteColor={darkPalette.warning} />
-                    <PaletteSection title="Info" paletteColor={darkPalette.info} />
-                    <SimpleColorSection title="Text" colors={darkPalette.text} />
-                    <SimpleColorSection title="Background" colors={darkPalette.background} />
-                </Stack>
-            </Box>
-        </Stack>
+// Main page component.
+const ColorPalettePage = () => {
+    return (
+        <Box sx={{ p: 3 }}>
+            <Stack spacing={5}>
+                <TitleL>Color Palette</TitleL>
+                <Typography>
+                    The theme provides a default color palette. This can be customized by providing a palette object to the theme.
+                    The following is a demonstration of the color palette used in this application.
+                </Typography>
+                <ThemePalette mode="light" />
+                <ThemePalette mode="dark" />
+            </Stack>
+        </Box>
     );
 };
 
