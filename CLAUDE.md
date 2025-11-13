@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SSG Pay System is a React + TypeScript web application built with Material-UI (MUI) components. It features both desktop and mobile layouts for managing payment system data. The project was bootstrapped with Create React App and uses MUI X components for advanced data visualization and interaction.
+SSG Design System is a React + TypeScript web application built with Material-UI (MUI) components. It features both desktop and mobile layouts for a comprehensive design system documentation site. The project was bootstrapped with Create React App and uses MUI X components for advanced data visualization and interaction.
 
 ## Development Commands
 
@@ -133,7 +133,7 @@ These are actual application pages, not just examples.
 
 ## Important Notes
 
-- **GitHub Pages deployment:** Homepage set to `https://longjio.github.io/ssg_pay_system`
+- **GitHub Pages deployment:** Homepage set to `https://longjio.github.io/ssg_design_system`
 - **Host binding:** Dev server runs on 127.0.0.1 (not localhost) - see package.json start script
 - **Memory allocation:** Node process uses `--max-old-space-size=8192` for large builds
 - **Patch-package:** Used for applying patches to dependencies (runs on postinstall)

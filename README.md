@@ -1,10 +1,10 @@
-# SSG Pay System
+# SSG Design System
 
 > MUI 기반 디자인 시스템 및 컴포넌트 라이브러리
 
-SSG Pay System은 React + TypeScript로 구축된 디자인 시스템 사이트입니다. Material-UI(MUI) v7 컴포넌트를 기반으로 재사용 가능한 컴포넌트 라이브러리를 문서화하고 제공하며, 데스크톱과 모바일 환경 모두를 지원하는 반응형 레이아웃을 갖추고 있습니다.
+SSG Design System은 React + TypeScript로 구축된 디자인 시스템 사이트입니다. Material-UI(MUI) v7 컴포넌트를 기반으로 재사용 가능한 컴포넌트 라이브러리를 문서화하고 제공하며, 데스크톱과 모바일 환경 모두를 지원하는 반응형 레이아웃을 갖추고 있습니다.
 
-**Live Demo**: [https://longjio.github.io/ssg_pay_system](https://longjio.github.io/ssg_pay_system)
+**Live Demo**: [https://longjio.github.io/ssg_design_system](https://longjio.github.io/ssg_design_system)
 
 ## 주요 특징
 
@@ -47,8 +47,8 @@ SSG Pay System은 React + TypeScript로 구축된 디자인 시스템 사이트�
 
 ```bash
 # 저장소 클론
-git clone https://github.com/longjio/ssg_pay_system.git
-cd ssg_pay_system
+git clone https://github.com/longjio/ssg_design_system.git
+cd ssg_design_system
 
 # 의존성 설치
 npm install
@@ -93,7 +93,7 @@ npm run build-storybook
 ## 프로젝트 구조
 
 ```
-ssg_pay_system/
+ssg_design_system/
 ├── src/
 │   ├── components/          # 재사용 가능한 컴포넌트
 │   │   ├── button/         # 버튼 컴포넌트들
@@ -311,7 +311,7 @@ import { ComponentShowcase } from './components/common';
 npm run deploy
 ```
 
-배포 URL: [https://longjio.github.io/ssg_pay_system](https://longjio.github.io/ssg_pay_system)
+배포 URL: [https://longjio.github.io/ssg_design_system](https://longjio.github.io/ssg_design_system)
 
 ## 라이선스
 
