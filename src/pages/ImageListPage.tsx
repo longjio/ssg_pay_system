@@ -1,7 +1,9 @@
 import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, Paper } from '@mui/material';
 import { DsImageList, DsImageListItem } from '../components/layout/DsImageList';
 import ComponentShowcase from '../components/common/ComponentShowcase';
+import { PropsTable, PropDefinition } from '../components/common';
+import { TitleL, BodyM } from '../components/typography';
 
 // 예시 이미지 데이터
 // 'img' URL에서 기존의 Unsplash 쿼리 파라미터를 모두 제거하여 순수한 기본 URL만 남깁니다.
@@ -220,13 +222,95 @@ const masonryCode = `
 `;
 
 const ImageListPage = () => {
+    // ImageList Props 정의
+    const imageListProps: PropDefinition[] = [
+        {
+            name: 'variant',
+            type: "'masonry' | 'quilted' | 'standard' | 'woven'",
+            defaultValue: "'standard'",
+            description: '이미지 리스트의 레이아웃 유형을 지정합니다.',
+        },
+        {
+            name: 'cols',
+            type: 'number',
+            defaultValue: '2',
+            description: '그리드의 컬럼 수를 지정합니다.',
+        },
+        {
+            name: 'rowHeight',
+            type: "number | 'auto'",
+            defaultValue: "'auto'",
+            description: '각 행의 높이를 지정합니다. "auto"면 콘텐츠에 맞춰 자동 조절됩니다.',
+        },
+        {
+            name: 'gap',
+            type: 'number',
+            defaultValue: '4',
+            description: '이미지 간의 간격(px)을 지정합니다.',
+        },
+        {
+            name: 'sx',
+            type: 'SxProps<Theme>',
+            description: 'MUI의 sx prop을 사용하여 스타일을 지정합니다.',
+        },
+    ];
+
+    const imageListItemProps: PropDefinition[] = [
+        {
+            name: 'baseImgUrl',
+            type: 'string',
+            required: true,
+            description: '표시할 이미지의 URL입니다.',
+        },
+        {
+            name: 'imgAlt',
+            type: 'string',
+            description: '이미지의 대체 텍스트(alt)입니다.',
+        },
+        {
+            name: 'cols',
+            type: 'number',
+            defaultValue: '1',
+            description: '이미지 아이템이 차지할 컬럼 수입니다.',
+        },
+        {
+            name: 'rows',
+            type: 'number',
+            defaultValue: '1',
+            description: '이미지 아이템이 차지할 행 수입니다.',
+        },
+        {
+            name: 'withBar',
+            type: 'boolean',
+            defaultValue: 'false',
+            description: 'true로 설정하면 이미지 하단에 정보 바를 표시합니다.',
+        },
+        {
+            name: 'itemTitle',
+            type: 'string',
+            description: '정보 바에 표시될 제목입니다. withBar가 true일 때 사용됩니다.',
+        },
+        {
+            name: 'itemSubtitle',
+            type: 'string',
+            description: '정보 바에 표시될 부제목입니다. withBar가 true일 때 사용됩니다.',
+        },
+        {
+            name: 'dynamicHeight',
+            type: 'number',
+            description: 'Masonry 레이아웃에서 이미지의 동적 높이를 지정합니다.',
+        },
+    ];
+
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, p: 3 }}>
+        <Box sx={{ p: 3 }}>
             <Stack spacing={4}>
                 <Box>
-                    <Typography color="text.secondary" sx={{ mb: 4 }}>
-                        이미지 목록은 여러 이미지를 정돈된 격자(그리드) 형태로 깔끔하게 보여줍니다
-                    </Typography>
+                    <TitleL>Image List</TitleL>
+                    <BodyM sx={{ mt: 2, color: 'text.secondary' }}>
+                        이미지 목록은 여러 이미지를 정돈된 격자(그리드) 형태로 깔끔하게 보여줍니다.
+                        Standard, Quilted, Masonry 등 다양한 레이아웃을 지원합니다.
+                    </BodyM>
                 </Box>
                 <ComponentShowcase
                     title="Standard Image List"
@@ -246,6 +330,120 @@ const ImageListPage = () => {
                     component={masonryImageList}
                     code={masonryCode}
                 />
+
+                <Paper sx={{ p: 3 }}>
+                    <Typography variant="h6" gutterBottom>
+                        레이아웃 유형
+                    </Typography>
+                    <Stack spacing={2}>
+                        <Box>
+                            <Typography variant="body2" fontWeight="medium">
+                                • Standard
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                동일한 크기의 이미지를 균등한 그리드로 배치
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="body2" fontWeight="medium">
+                                • Quilted
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                rows와 cols를 지정하여 다양한 크기의 이미지를 퀼트 패턴으로 배치
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="body2" fontWeight="medium">
+                                • Masonry
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                이미지의 원본 비율을 유지하며 벽돌 쌓기 패턴으로 배치
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="body2" fontWeight="medium">
+                                • Woven
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                이미지를 직조 패턴으로 배치 (교차 배열)
+                            </Typography>
+                        </Box>
+                    </Stack>
+                </Paper>
+
+                <Paper sx={{ p: 3 }}>
+                    <Typography variant="h6" gutterBottom>
+                        사용 사례
+                    </Typography>
+                    <Stack spacing={2}>
+                        <Box>
+                            <Typography variant="body2" fontWeight="medium">
+                                • 포토 갤러리
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                작품, 여행 사진 등을 그리드로 정돈하여 표시
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="body2" fontWeight="medium">
+                                • 제품 이미지
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                쇼핑몰 상품 이미지를 균등하게 배치
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="body2" fontWeight="medium">
+                                • 포트폴리오
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                작업물을 시각적으로 매력적인 레이아웃으로 구성
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="body2" fontWeight="medium">
+                                • 소셜 미디어 피드
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                사용자 업로드 이미지를 Masonry 레이아웃으로 표시
+                            </Typography>
+                        </Box>
+                    </Stack>
+                </Paper>
+
+                <Paper sx={{ p: 3, bgcolor: 'action.hover' }}>
+                    <Typography variant="h6" gutterBottom>
+                        💡 사용 팁
+                    </Typography>
+                    <Stack spacing={1}>
+                        <Typography variant="body2">
+                            • Standard: 일관된 크기의 이미지에 적합 (제품 카탈로그 등)
+                        </Typography>
+                        <Typography variant="body2">
+                            • Quilted: 특정 이미지를 강조하고 싶을 때 유용 (rows, cols 조절)
+                        </Typography>
+                        <Typography variant="body2">
+                            • Masonry: 다양한 비율의 이미지에 최적 (Pinterest 스타일)
+                        </Typography>
+                        <Typography variant="body2">
+                            • gap prop으로 이미지 간격을 조절하여 밀도 조정 가능
+                        </Typography>
+                        <Typography variant="body2">
+                            • ImageListItemBar를 활용하여 제목, 설명, 액션 버튼 추가 가능
+                        </Typography>
+                    </Stack>
+                </Paper>
+
+                {/* API 문서 섹션 */}
+                <Box>
+                    <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2 }}>
+                        API
+                    </Typography>
+                    <PropsTable props={imageListProps} title="ImageList Props" />
+                    <Box sx={{ mt: 3 }}>
+                        <PropsTable props={imageListItemProps} title="ImageListItem Props" />
+                    </Box>
+                </Box>
             </Stack>
         </Box>
     );

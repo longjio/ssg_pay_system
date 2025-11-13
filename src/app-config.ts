@@ -32,14 +32,21 @@ export const menuGroups: MenuGroupInfo[] = [
 const DummyComponent = lazy(() => Promise.resolve({ default: () => null }));
 
 export const appRoutes: AppRouteConfig[] = [
-    // 메뉴에 표시되지 않는 페이지
-    { id: 'home', path: '/', component: lazy(() => import('./template/TabsGrid')) },
+    // 메뉴에 표시되지 않는 페이지 (홈 - 디자인 시스템 소개)
+    { id: 'home', path: '/', component: lazy(() => import('./pages/ComponentShowcasePage')) },
 
     // Foundations 그룹
     { id: 'color-palette', path: '/color-palette', component: lazy(() => import('./pages/ColorPalettePage')), menu: { text: 'Color Palette', group: 'foundations' } },
     { id: 'typography', path: '/typography', component: lazy(() => import('./pages/TypographyPage')), menu: { text: 'Typography', group: 'foundations' } },
+    { id: 'spacing', path: '/spacing', component: lazy(() => import('./pages/SpacingPage')), menu: { text: 'Spacing', group: 'foundations' } },
+    { id: 'shadow', path: '/shadow', component: lazy(() => import('./pages/ShadowPage')), menu: { text: 'Shadow', group: 'foundations' } },
+    { id: 'border', path: '/border', component: lazy(() => import('./pages/BorderPage')), menu: { text: 'Border', group: 'foundations' } },
+    { id: 'radius', path: '/radius', component: lazy(() => import('./pages/RadiusPage')), menu: { text: 'Radius', group: 'foundations' } },
 
     // Layout 그룹
+    { id: 'box', path: '/box', component: lazy(() => import('./pages/BoxPage')), menu: { text: 'Box', group: 'layout' } },
+    { id: 'container', path: '/container', component: lazy(() => import('./pages/ContainerPage')), menu: { text: 'Container', group: 'layout' } },
+    { id: 'stack', path: '/stack', component: lazy(() => import('./pages/StackPage')), menu: { text: 'Stack', group: 'layout' } },
     { id: 'grid', path: '/grid', component: lazy(() => import('./pages/GridPage')), menu: { text: 'Grid', group: 'layout' } },
     { id: 'image-list', path: '/image-list', component: lazy(() => import('./pages/ImageListPage')), menu: { text: 'Image List', group: 'layout' } },
     
@@ -124,7 +131,6 @@ export const appRoutes: AppRouteConfig[] = [
 
     // Patterns 그룹
     { id: 'dashboard', path: '/dashboard', component: lazy(() => import('./pages/Dashboard')), menu: { text: 'Dashboard', group: 'patterns' } },
-    { id: 'component-showcase', path: '/component-showcase', component: lazy(() => import('./pages/ComponentShowcasePage')), menu: { text: 'Component Showcase', group: 'patterns' } },
     { id: 'signup-showcase', path: '/signup-showcase', component: lazy(() => import('./pages/SignupPage')), menu: { text: 'Signup Page', group: 'patterns' } },
     { id: 'tabs-grid', path: '/tabs-grid', component: lazy(() => import('./template/TabsGrid')), menu: { text: '지불이관 명세서', group: 'patterns' } },
     { id: 'menu-config', path: '/menu-config', component: lazy(() => import('./template/SearchGrid')), menu: { text: '특정 지불 명세서', group: 'patterns' } },
